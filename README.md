@@ -14,7 +14,7 @@ Since non-Steam games also lack a 'game info' tab, I also took the opportunity t
 - **Store Badges**: Displays themed badges for various storefronts:
   - **GOG**
   - **Epic Games**
-  - **Amazon**
+  - **Amazon Games**
   - **Rockstar Games**
   - **Ubisoft**
   - **Xbox**
@@ -58,6 +58,8 @@ If you add non-Steam games to your Steam library manually or through the [Heroic
 Emulated games use the emulator badge when a collection name, launch options, executable path, or installation directory matches `emu`, `roms`, `emulators`, or `retro`. For example, add games to a Steam collection named `Emulators`. Collection names take priority over launch metadata, using the same matching rules as storefront badges.
 
 GameVault games match `gamevault` or `game vault`, including Unifideck launch options such as `gamevault:123`. Manually installed games can use a collection named `Sideloaded`; `side-loaded` and `side loaded` also match. These badges follow the same collection-first matching rules.
+
+Known emulator launchers are detected before generic storefront paths. Collections named `RetroArch`, `Dolphin`, `PCSX2`, `RPCS3`, `Xenia`, or `xemu` select that emulator’s badge and take priority over storefront collections. Other emulators use the generic badge.
 
 ## Screenshots
 
