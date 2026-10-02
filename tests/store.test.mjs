@@ -11,6 +11,10 @@ test('sanitizedGameStoreName accepts known stores case-insensitively', () => {
   assert.equal(sanitizedGameStoreName('UBISOFT'), GameStoreName.UBISOFT);
   assert.equal(sanitizedGameStoreName('Xbox'), GameStoreName.XBOX);
   assert.equal(sanitizedGameStoreName('EA'), GameStoreName.EA);
+  assert.equal(sanitizedGameStoreName('Itch'), GameStoreName.ITCH);
+  assert.equal(sanitizedGameStoreName('Emulators'), GameStoreName.EMULATORS);
+  assert.equal(sanitizedGameStoreName('GameVault'), GameStoreName.GAMEVAULT);
+  assert.equal(sanitizedGameStoreName('SIDELOADED'), GameStoreName.SIDELOADED);
   assert.equal(sanitizedGameStoreName('default'), GameStoreName.DEFAULT);
 });
 

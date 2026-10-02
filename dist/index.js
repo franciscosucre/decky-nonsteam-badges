@@ -2,7 +2,7 @@
 // @ts-ignore
 
 // Prevents it from being duplicated in output.
-const manifest = {"id":"decky-nonsteam-badges","name":"Non-Steam Badges","author":"sebet","version":"0.2.0","flags":[],"api_version":1,"publish":{"tags":["utility","ui","badges","nonsteam","non-steam"],"description":"A Decky plugin that helps identifying non-Steam games using themed badges","image":"https://raw.githubusercontent.com/sebet/decky-nonsteam-badges/main/assets/screenshot.jpg"}};
+const manifest = {"id":"decky-nonsteam-badges","name":"Non-Steam Badges","author":"sebet","version":"0.2.1","flags":[],"api_version":1,"publish":{"tags":["utility","ui","badges","nonsteam","non-steam"],"description":"A Decky plugin that helps identifying non-Steam games using themed badges","image":"https://raw.githubusercontent.com/sebet/decky-nonsteam-badges/main/assets/screenshot.jpg"}};
 const API_VERSION = 2;
 const internalAPIConnection = window.__DECKY_SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED_deckyLoaderAPIInit;
 // Initialize
@@ -32,11 +32,10 @@ const definePlugin = (fn) => {
 };
 
 function log(context, message, level = "log") {
-    console[level](`[Non-Steam Badges][${context}] ${message}`);
+    return;
 }
 
 const PLUGIN_ID = "nonsteam-badges-decky";
-const context$6 = "styleInjector";
 let loadedCSS = "";
 function injectStyle(css) {
     if (!css)
@@ -65,7 +64,6 @@ function injectStyleIntoWindow(targetWindow) {
     style.setAttribute("data-plugin", PLUGIN_ID);
     style.innerHTML = css;
     targetWindow.document.head.appendChild(style);
-    log(context$6, "Injected styles into BigPicture window");
 }
 function removeStyleFromWindow(targetWindow) {
     if (!targetWindow || !targetWindow.document)
@@ -73,11 +71,10 @@ function removeStyleFromWindow(targetWindow) {
     const style = targetWindow.document.querySelector(`style[data-plugin="${PLUGIN_ID}"]`);
     if (style) {
         style.remove();
-        log(context$6, "Removed styles from BigPicture window");
     }
 }
 
-var css_248z$1 = ".Badge-module_badge__MUvUi {\n  position: absolute;\n  display: flex;\n  border-radius: 5px;\n  backdrop-filter: blur(10px);\n  -webkit-backdrop-filter: blur(10px);\n  color: white;\n  pointer-events: none;\n  background: #0000002e;\n  z-index: 9999;\n}\n\n.Badge-module_detailsBadge__ycul2 {\n  z-index: 0;\n  box-sizing: border-box;\n  padding: 5px;\n  padding-bottom: 0;\n}\n\n.Badge-module_detailsBadgeWithButton__YG9ZN {\n  flex-direction: column;\n  height: auto;\n}\n\n.Badge-module_detailsBadgeWithButton__YG9ZN svg.icon-badge {\n  width: 48px;\n  height: 48px;\n}\n\n.Badge-module_libraryBadge__nvyI6 {\n  padding: 2px;\n  border-radius: 2px;\n}\n\n.Badge-module_libraryBadge__nvyI6 svg.icon-badge {\n  width: 28px;\n  height: 28px;\n}\n\n.Badge-module_homeBadge__VBw7G {\n  padding: 2px;\n  border-radius: 2px;\n}\n\n.Badge-module_homeBadge__VBw7G svg.icon-badge {\n  width: 28px;\n  height: 28px;\n}\n\n.Panel\n  [role=\"listitem\"]:first-of-type\n  .Badge-module_homeBadge__VBw7G\n  svg.icon-badge {\n  width: 40px;\n  height: 40px;\n}\n\n.Badge-module_searchBadge__V2InQ svg.icon-badge {\n  width: 24px;\n  height: 24px;\n}\n\n.Badge-module_nonsteam-badge-pulsing__k7UJv {\n  animation: Badge-module_nonsteam-badge-pulse__ux3h3 2s infinite ease-in-out;\n}\n\n.Badge-module_top-left__vhIBr {\n  top: 4px;\n  left: 4px;\n}\n\n.Badge-module_top-right__k9tm2 {\n  top: 4px;\n  right: 4px;\n}\n\n.Badge-module_bottom-left__B0MGj {\n  bottom: 4px;\n  left: 4px;\n}\n\n.Badge-module_bottom-right__wK-WR {\n  bottom: 4px;\n  right: 4px;\n}\n\n.Badge-module_details-top-left__9FED9 {\n  flex-direction: row;\n  gap: 5px;\n  top: 45px;\n  left: 20px;\n}\n\n.Badge-module_details-top-left__9FED9 svg.icon-badge {\n  width: 42px;\n  height: 42px;\n}\n\n.Badge-module_detailsBadgeWithButton__YG9ZN.Badge-module_details-top-left__9FED9 svg.icon-badge {\n  width: 32px;\n  height: 32px;\n}\n\n.Badge-module_details-top-right__GADVk {\n  top: 55px;\n  right: 20px;\n  align-items: center;\n}\n\n.Badge-module_search-top-right__V3fHe {\n  top: 10px;\n  right: 5px;\n}\n\n@keyframes Badge-module_nonsteam-badge-pulse__ux3h3 {\n  0% {\n    transform: scale(0.9);\n    opacity: 0.4;\n  }\n  50% {\n    transform: scale(1.1);\n    opacity: 0.8;\n  }\n  100% {\n    transform: scale(0.9);\n    opacity: 0.4;\n  }\n}\n";
+var css_248z$1 = ".Badge-module_badge__MUvUi {\n  --badge-size: 28px;\n  --badge-padding: calc(var(--badge-size) * 0.08);\n  --badge-offset: calc(var(--badge-size) * 0.14);\n  position: absolute;\n  display: flex;\n  border-radius: 5px;\n  backdrop-filter: blur(10px);\n  -webkit-backdrop-filter: blur(10px);\n  color: white;\n  pointer-events: none;\n  background: #0000002e;\n  z-index: 9999;\n}\n\n.Badge-module_detailsBadge__ycul2 {\n  --badge-size: clamp(32px, 2.8vw, 48px);\n  z-index: 0;\n  box-sizing: border-box;\n  padding: calc(var(--badge-size) * 0.1);\n  padding-bottom: 0;\n}\n\n.Badge-module_detailsBadgeWithButton__YG9ZN {\n  flex-direction: column;\n  height: auto;\n}\n\n.Badge-module_detailsBadgeWithButton__YG9ZN svg.icon-badge {\n  width: var(--badge-size);\n  height: var(--badge-size);\n}\n\n.Badge-module_libraryBadge__nvyI6 {\n  --badge-size: clamp(24px, 1.6vw, 32px);\n  padding: var(--badge-padding);\n  border-radius: 2px;\n}\n\n.Badge-module_libraryBadge__nvyI6 svg.icon-badge {\n  width: var(--badge-size);\n  height: var(--badge-size);\n}\n\n.Badge-module_homeBadge__VBw7G {\n  --badge-size: clamp(24px, 1.6vw, 32px);\n  padding: var(--badge-padding);\n  border-radius: 2px;\n}\n\n.Badge-module_homeBadge__VBw7G svg.icon-badge {\n  width: var(--badge-size);\n  height: var(--badge-size);\n}\n\n.Panel\n  [role=\"listitem\"]:first-of-type\n  .Badge-module_homeBadge__VBw7G\n  svg.icon-badge {\n  width: clamp(32px, 2vw, 40px);\n  height: clamp(32px, 2vw, 40px);\n}\n\n.Badge-module_searchBadge__V2InQ {\n  --badge-size: clamp(20px, 1.4vw, 28px);\n}\n\n.Badge-module_searchBadge__V2InQ svg.icon-badge {\n  width: var(--badge-size);\n  height: var(--badge-size);\n}\n\n.Badge-module_nonsteam-badge-pulsing__k7UJv {\n  animation: Badge-module_nonsteam-badge-pulse__ux3h3 2s infinite ease-in-out;\n}\n\n.Badge-module_top-left__vhIBr {\n  top: var(--badge-offset);\n  left: var(--badge-offset);\n}\n\n.Badge-module_top-right__k9tm2 {\n  top: var(--badge-offset);\n  right: var(--badge-offset);\n}\n\n.Badge-module_bottom-left__B0MGj {\n  bottom: var(--badge-offset);\n  left: var(--badge-offset);\n}\n\n.Badge-module_bottom-right__wK-WR {\n  bottom: var(--badge-offset);\n  right: var(--badge-offset);\n}\n\n.Badge-module_details-top-left__9FED9 {\n  flex-direction: row;\n  gap: 5px;\n  top: 45px;\n  left: 20px;\n}\n\n.Badge-module_details-top-left__9FED9 svg.icon-badge {\n  width: calc(var(--badge-size) * 0.875);\n  height: calc(var(--badge-size) * 0.875);\n}\n\n.Badge-module_detailsBadgeWithButton__YG9ZN.Badge-module_details-top-left__9FED9 svg.icon-badge {\n  width: calc(var(--badge-size) * 0.67);\n  height: calc(var(--badge-size) * 0.67);\n}\n\n.Badge-module_details-top-right__GADVk {\n  top: 55px;\n  right: 20px;\n  align-items: center;\n}\n\n.Badge-module_search-top-right__V3fHe {\n  top: 10px;\n  right: 5px;\n}\n\n@keyframes Badge-module_nonsteam-badge-pulse__ux3h3 {\n  0% {\n    transform: scale(0.9);\n    opacity: 0.4;\n  }\n  50% {\n    transform: scale(1.1);\n    opacity: 0.8;\n  }\n  100% {\n    transform: scale(0.9);\n    opacity: 0.4;\n  }\n}\n";
 var styles$1 = {"badge":"Badge-module_badge__MUvUi","detailsBadge":"Badge-module_detailsBadge__ycul2","detailsBadgeWithButton":"Badge-module_detailsBadgeWithButton__YG9ZN","libraryBadge":"Badge-module_libraryBadge__nvyI6","homeBadge":"Badge-module_homeBadge__VBw7G","searchBadge":"Badge-module_searchBadge__V2InQ","nonsteam-badge-pulsing":"Badge-module_nonsteam-badge-pulsing__k7UJv","nonsteam-badge-pulse":"Badge-module_nonsteam-badge-pulse__ux3h3","top-left":"Badge-module_top-left__vhIBr","top-right":"Badge-module_top-right__k9tm2","bottom-left":"Badge-module_bottom-left__B0MGj","bottom-right":"Badge-module_bottom-right__wK-WR","details-top-left":"Badge-module_details-top-left__9FED9","details-top-right":"Badge-module_details-top-right__GADVk","search-top-right":"Badge-module_search-top-right__V3fHe"};
 injectStyle(css_248z$1);
 
@@ -90,6 +87,10 @@ var GameStoreName;
     GameStoreName["UBISOFT"] = "ubisoft";
     GameStoreName["XBOX"] = "xbox";
     GameStoreName["EA"] = "ea";
+    GameStoreName["ITCH"] = "itch";
+    GameStoreName["EMULATORS"] = "emulators";
+    GameStoreName["GAMEVAULT"] = "gamevault";
+    GameStoreName["SIDELOADED"] = "sideloaded";
     GameStoreName["DEFAULT"] = "default";
 })(GameStoreName || (GameStoreName = {}));
 var GameStoreContext;
@@ -112,6 +113,10 @@ function gameStoreIsValid(gameStore) {
         GameStoreName.UBISOFT,
         GameStoreName.XBOX,
         GameStoreName.EA,
+        GameStoreName.ITCH,
+        GameStoreName.EMULATORS,
+        GameStoreName.GAMEVAULT,
+        GameStoreName.SIDELOADED,
         GameStoreName.DEFAULT,
     ].includes(gameStore);
 }
@@ -144,6 +149,10 @@ var SupportedStores;
     SupportedStores["UBISOFT"] = "ubisoft";
     SupportedStores["XBOX"] = "xbox";
     SupportedStores["EA"] = "ea";
+    SupportedStores["ITCH"] = "itch";
+    SupportedStores["EMULATORS"] = "emulators";
+    SupportedStores["GAMEVAULT"] = "gamevault";
+    SupportedStores["SIDELOADED"] = "sideloaded";
 })(SupportedStores || (SupportedStores = {}));
 var BadgePosition;
 (function (BadgePosition) {
@@ -162,7 +171,7 @@ const DEFAULT_SETTINGS = {
     disableBadges: false,
 };
 
-const context$5 = "settings";
+const context$3 = "settings";
 const SETTINGS_KEY = "nonsteam-badges-settings";
 function getSettings() {
     try {
@@ -172,20 +181,18 @@ function getSettings() {
         return { ...DEFAULT_SETTINGS, ...JSON.parse(stored) };
     }
     catch (e) {
-        log(context$5, "Error loading settings:", "error");
         return DEFAULT_SETTINGS;
     }
 }
 function saveSettings(settings) {
     try {
         localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-        log(context$5, `Settings saved: ${JSON.stringify(settings)}`);
+        log(context$3, `Settings saved: ${JSON.stringify(settings)}`);
         window.dispatchEvent(new CustomEvent(SETTINGS_CHANGED_EVENT, {
             detail: settings,
         }));
     }
     catch (e) {
-        log(context$5, "Error saving settings:", "error");
     }
 }
 
@@ -219,6 +226,26 @@ var ea = [
 	"electronic arts",
 	"electronicarts"
 ];
+var itch = [
+	"itch",
+	"itch.io",
+	"itchio"
+];
+var emulators = [
+	"emu",
+	"roms",
+	"emulators",
+	"retro"
+];
+var gamevault = [
+	"gamevault",
+	"game vault"
+];
+var sideloaded = [
+	"sideloaded",
+	"side-loaded",
+	"side loaded"
+];
 var storeMappings = {
 	gog: gog,
 	epic: epic,
@@ -226,10 +253,14 @@ var storeMappings = {
 	rockstar: rockstar,
 	ubisoft: ubisoft,
 	xbox: xbox,
-	ea: ea
+	ea: ea,
+	itch: itch,
+	emulators: emulators,
+	gamevault: gamevault,
+	sideloaded: sideloaded
 };
 
-const context$4 = "cache";
+const context$2 = "cache";
 const CACHE_TTL_MS = 60 * 1000; // 1 minute
 let gameStoreMappingsCache = {};
 let mappingsLoaded = false;
@@ -238,6 +269,35 @@ let lastFetchTime = 0;
 let lastUserCollectionsRef = null;
 let lastUserCollectionsSignature = "";
 let collectionVersion = 0;
+function escapeRegExp$1(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+function getAppIdCandidates(appid) {
+    const numericAppId = parseInt(appid, 10);
+    if (isNaN(numericAppId))
+        return [appid];
+    const unsignedAppId = numericAppId >>> 0;
+    const signedAppId = unsignedAppId > 0x7fffffff ? unsignedAppId - 0x100000000 : unsignedAppId;
+    return Array.from(new Set([
+        appid,
+        String(numericAppId),
+        String(unsignedAppId),
+        String(signedAppId),
+        numericAppId,
+        unsignedAppId,
+        signedAppId,
+    ]));
+}
+function collectionContainsApp(apps, appid) {
+    const candidates = getAppIdCandidates(appid);
+    if (apps && typeof apps.has === "function") {
+        return candidates.some((candidate) => apps.has(candidate));
+    }
+    if (Array.isArray(apps)) {
+        return candidates.some((candidate) => apps.includes(candidate));
+    }
+    return false;
+}
 /**
  * Wait for store mappings to be loaded from the backend before attempting to access the cache.
  */
@@ -257,28 +317,18 @@ async function ensureMappingsLoaded(force = false) {
         });
     }
     isFetchingMappings = true;
-    if (isExpired) {
-        log(context$4, "Store mappings cache expired or missing, fetching...");
-    }
-    else {
-        log(context$4, "Fetching all store mappings...");
-    }
     try {
         const result = await call("get_all_store_mappings");
         if (result) {
             gameStoreMappingsCache = result;
             mappingsLoaded = true;
             lastFetchTime = Date.now();
-            log(context$4, `Loaded ${Object.keys(result).length} mappings`);
         }
         else {
-            log(context$4, "Failed to load mappings: API call returned unsuccessful", "error");
-            log(context$4, JSON.stringify(result), "error");
+            log(context$2, JSON.stringify(result), "error");
         }
     }
     catch (e) {
-        log(context$4, "Failed to load mappings", "error");
-        log(context$4, e, "error");
     }
     finally {
         isFetchingMappings = false;
@@ -311,18 +361,13 @@ function getFrontendStore(appid) {
             lastUserCollectionsSignature = collectionStateSignature;
             collectionVersion++;
         }
-        const numericAppId = parseInt(appid);
-        if (isNaN(numericAppId))
-            return null;
         for (const collection of userCollections) {
-            if (collection.apps &&
-                collection.apps.has &&
-                collection.apps.has(numericAppId)) {
+            if (collection.apps && collectionContainsApp(collection.apps, appid)) {
                 const colName = String(collection.displayName ?? "");
                 for (const store of supportedStores) {
                     const aliases = storeMappings[store] || [store];
                     for (const alias of aliases) {
-                        const regex = new RegExp(`\\b${alias}\\b`, "i");
+                        const regex = new RegExp(`\\b${escapeRegExp$1(alias)}\\b`, "i");
                         if (regex.test(colName)) {
                             return store;
                         }
@@ -333,7 +378,7 @@ function getFrontendStore(appid) {
         return null;
     }
     catch (e) {
-        log(context$4, "Could not check frontend collections: " + JSON.stringify(e), "warn");
+        log(context$2, "Could not check frontend collections: " + JSON.stringify(e), "warn");
         return null;
     }
 }
@@ -414,6 +459,27 @@ const BADGE_STYLES = {
         gradient: "linear-gradient(135deg, #111111 0%, #333333 100%)",
         icon: `<svg class="icon-badge" width="${width}" height="${height}" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M17.5 15l-3 -6l-3 6h-5l1.5 -3"/><path d="M17 14h-2"/><path d="M6.5 12h3.5"/><path d="M8 9h3"/></svg>`,
     },
+    itch: {
+        name: "ITCH",
+        gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        icon: `<svg class="icon-badge" width="${width}" height="${height}" viewBox="0 0 245.371 220.736" xmlns="http://www.w3.org/2000/svg"><path d="M31.99 1.365C21.287 7.72.2 31.945 0 38.298v10.516C0 62.144 12.46 73.86 23.773 73.86c13.584 0 24.902-11.258 24.903-24.62 0 13.362 10.93 24.62 24.515 24.62 13.586 0 24.165-11.258 24.165-24.62 0 13.362 11.622 24.62 25.207 24.62h.246c13.586 0 25.208-11.258 25.208-24.62 0 13.362 10.58 24.62 24.164 24.62 13.585 0 24.515-11.258 24.515-24.62 0 13.362 11.32 24.62 24.903 24.62 11.313 0 23.773-11.714 23.773-25.046V38.298c-.2-6.354-21.287-30.58-31.988-36.933C180.118.197 157.056-.005 122.685 0c-34.37.003-81.228.54-90.697 1.365zm65.194 66.217a28.025 28.025 0 0 1-4.78 6.155c-5.128 5.014-12.157 8.122-19.906 8.122a28.482 28.482 0 0 1-19.948-8.126c-1.858-1.82-3.27-3.766-4.563-6.032l-.006.004c-1.292 2.27-3.092 4.215-4.954 6.037a28.5 28.5 0 0 1-19.948 8.12c-.934 0-1.906-.258-2.692-.528-1.092 11.372-1.553 22.24-1.716 30.164l-.002.045c-.02 4.024-.04 7.333-.06 11.93.21 23.86-2.363 77.334 10.52 90.473 19.964 4.655 56.7 6.775 93.555 6.788h.006c36.854-.013 73.59-2.133 93.554-6.788 12.883-13.14 10.31-66.614 10.52-90.474-.022-4.596-.04-7.905-.06-11.93l-.003-.045c-.162-7.926-.623-18.793-1.715-30.165-.786.27-1.757.528-2.692.528a28.5 28.5 0 0 1-19.948-8.12c-1.862-1.822-3.662-3.766-4.955-6.037l-.006-.004c-1.294 2.266-2.705 4.213-4.563 6.032a28.48 28.48 0 0 1-19.947 8.125c-7.748 0-14.778-3.11-19.906-8.123a28.025 28.025 0 0 1-4.78-6.155 27.99 27.99 0 0 1-4.736 6.155 28.49 28.49 0 0 1-19.95 8.124c-.27 0-.54-.012-.81-.02h-.007c-.27.008-.54.02-.813.02a28.49 28.49 0 0 1-19.95-8.123 27.992 27.992 0 0 1-4.736-6.155zm-20.486 26.49l-.002.01h.015c8.113.017 15.32 0 24.25 9.746 7.028-.737 14.372-1.105 21.722-1.094h.006c7.35-.01 14.694.357 21.723 1.094 8.93-9.747 16.137-9.73 24.25-9.746h.014l-.002-.01c3.833 0 19.166 0 29.85 30.007L210 165.244c8.504 30.624-2.723 31.373-16.727 31.4-20.768-.773-32.267-15.855-32.267-30.935-11.496 1.884-24.907 2.826-38.318 2.827h-.006c-13.412 0-26.823-.943-38.318-2.827 0 15.08-11.5 30.162-32.267 30.935-14.004-.027-25.23-.775-16.726-31.4L46.85 124.08C57.534 94.073 72.867 94.073 76.7 94.073zm45.985 23.582v.006c-.02.02-21.863 20.08-25.79 27.215l14.304-.573v12.474c0 .584 5.74.346 11.486.08h.006c5.744.266 11.485.504 11.485-.08v-12.474l14.304.573c-3.928-7.135-25.79-27.215-25.79-27.215v-.006l-.003.002z" fill="white"/></svg>`,
+    },
+    emulators: {
+        name: "EMULATORS",
+        gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        icon: `<svg class="icon-badge" width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 416 416" fill="white" xml:space="preserve"><path d="M262.559 394.66c-13.331 6.45-26.31 12.762-39.31 19.03-4.693 2.262-5.261 1.798-5.554-3.393-.757-13.451-.43-26.951-1.187-40.369-.937-16.592-.336-33.227-1.845-49.776-.437-4.792-2.302-9.243-6.956-11.403-8.82-4.093-11.439-11.053-11.164-20.297.191-6.402-.873-12.868-1.702-19.264-.661-5.102.662-8.839 4.959-12.07 13.942-10.482 27.7-21.204 41.936-31.3 3.968-2.815 6.845-6.719 8.265-11.585 7.997-27.403 16.227-54.74 23.997-82.207 2.571-9.091-.45-17.59-6.127-24.73-5.778-7.27-12.182-14.064-18.592-20.799-3.639-3.824-6.114-7.894-5.574-13.286a2998 2998 0 0 1 3.44-32.6c.768-6.908 1.456-13.837 2.601-20.687 1.37-8.194 9.427-11.887 16.197-7.129 8.693 6.11 16.897 12.915 25.356 19.36 15.847 12.076 31.676 24.176 47.613 36.13 7.573 5.68 11.636 12.804 11.425 22.498-.453 20.91-2.247 41.721-3.925 62.55-.932 11.571-1.35 23.183-2.151 34.766-1.223 17.692-2.868 35.36-3.77 53.066-.574 11.268-1.37 22.512-2.181 33.76-1.347 18.68-2.683 37.36-3.897 56.047-.538 8.285-.923 16.586-1.075 24.885-.083 4.544-1.83 7.577-6.018 9.357-21.111 8.97-41.877 18.696-62.519 28.69-.59.286-1.264.403-2.242.755"/><path d="M144.711 256.055c12.467 2.295 24.494 4.66 36.599 6.528 4.894.755 7.021 3.052 6.998 7.807-.045 8.977 1.143 17.868 2.095 26.765.566 5.29 2.6 9.904 7.608 12.751 7.49 4.258 10.471 10.62 10.414 19.395-.128 19.953.227 39.923 1.016 59.86.32 8.107 1.77 16.136-.634 24.07-3.042.785-5.2-1.211-7.677-1.978-17.117-5.3-34.246-10.566-51.323-15.995-16.275-5.175-32.479-10.576-48.749-15.767-2.296-.733-2.946-2.07-3.374-4.274-1.88-9.691-.842-19.533-1.748-29.299-1.44-15.52-1.677-31.158-2.191-46.754-.274-8.296-4.668-13.572-11.592-17.171-6.007-3.123-8.143-8.183-8.522-14.666-.482-8.261-1.308-16.516-2.398-24.719-.33-2.488-.152-4.172 1.898-5.587 8.62-5.95 17.197-11.96 25.851-17.858 2.875-1.96 5.873-2.114 9.58.946-8.884 8.112-19.153 14.032-29.752 22.357 22.419 6.341 44.337 8.191 65.901 13.59m-13.393 63.668c-1.132 15.43 3.383 30.619 1.965 46.058-.488 5.316 1.897 8.42 7.001 9.862a1080 1080 0 0 1 26.22 7.775c6.536 2.027 8.3.978 8.186-5.833-.21-12.614-.68-25.224-.95-37.838-.107-4.974-.056-9.923-.988-14.867-.593-3.148-2.095-5.404-4.995-6.213-9.253-2.579-18.524-5.148-27.897-7.233-7.505-1.67-8.44-.602-8.542 8.29M209.796 21.68c9.657-1.354 19.013-1.005 28.156-2.822 2.822-.56 4.653.442 4.311 3.651-.772 7.242-1.623 14.475-2.454 21.71-1.152 10.028-2.725 20.03-3.326 30.09-.383 6.428 3.334 11.795 7.612 16.313 5.375 5.675 11.013 11.093 16.02 17.12 6.422 7.734 9.45 16.185 6.416 26.25-6.7 22.227-13.265 44.493-19.965 66.72-1.845 6.118-2.144 12.78-6.828 17.917-4.339 4.76-9.772 7.915-15.244 10.958-3.23 1.796-6.888-.128-10.233-.527-10.516-1.255-20.93-3.344-31.415-4.893-13.919-2.057-27.87-3.897-41.803-5.857-4.091-.576-8.171-1.229-12.252-1.876-2.522-.4-3.549-1.712-2.354-4.198 4.048-8.423 3.002-16.125-3.304-23.04-2.08-2.28-1.197-4.617-.4-7.008 5.04-15.124 10.09-30.245 15.106-45.376 5.255-15.852 2.396-24.893-10.315-35.554-5.595-4.692-10.457-10.26-15.643-15.44-3.568-3.564-3.67-8.111-3.114-12.599 1.428-11.496 3.127-22.959 4.693-34.439.47-3.441.137-6.932 1.176-10.365 2.229-7.364 9.195-9.765 15.079-4.828 2.587 2.17 5.392 3.302 8.668 3.075 7.934-.55 15.855-1.294 23.789-1.843 15.714-1.088 31.435-2.096 47.624-3.14m-63.97 163.418c-1.193 3.629-2.42 7.246-3.57 10.888-1.616 5.105.784 9.773 6.164 10.799 6.813 1.299 13.74 2.016 20.629 2.9 12.64 1.62 25.357 2.762 37.913 4.87 15.215 2.553 20.535-.378 24.28-13.146 5.887-20.068 11.816-40.124 17.675-60.2 2.74-9.394-1.156-14.819-11.026-14.845-20.298-.055-40.588-.142-60.875-1.008-8.534-.364-13.1 3.35-15.733 11.594a13009 13009 0 0 1-15.456 48.148m4.418-148.807c-7.83-.626-15.542 1.337-23.365 1.061-3.652-.128-5.253 1.874-5.63 5.51-.851 8.225-1.963 16.425-3.042 24.626-.774 5.877-.598 6.366 5.33 6.171 15.416-.507 30.835-1.395 46.236-1.742 17.44-.392 34.863-1.788 52.333-1.26 6.78.204 8.34-1.672 8.59-8.606.06-1.644.414-3.275.587-4.916.802-7.57 1.642-15.136 2.352-22.714.273-2.915-.665-4.098-4.113-3.481-5.529.989-11.223.745-16.848 1.23-13.207 1.139-26.544.943-39.703 2.414-7.268.813-14.65-.353-22.727 1.707"/><path d="M104.02 195.145c5.086-4.299 11.623-4.522 15.635-.87 4.039 3.679 4.4 10.451.815 15.333-3.668 4.997-.142 13.494 5.984 14.007 4.382.367 8.522.966 9.657 6.006.696 3.091-3.669 6.462-9.134 7.683-4.093.915-8.086 1.386-12.266.13-2.804-.844-4.882-2.126-5.654-4.97-.84-3.091 1.693-4.427 3.5-6.032 1.477-1.31 4.416-1.463 3.344-4.624-1.093-3.22-1.252-6.89-5.225-8.455-9.116-3.592-11.198-9.162-6.656-18.208m89.57 37.597c4.002.801 7.67 1.263 10.478 3.953 2.95 2.827 2.773 5.825-.411 8.37-7.903 6.314-24.285 4.838-30.895 1.024-4.151-2.395-3.801-6.863.217-9.493 6.223-4.073 13.144-4.125 20.612-3.854M150.389 336.88c-6.26.17-7.255-.761-7.692-6.481-.1-1.307-.552-2.587-.65-3.894-.185-2.492-1.603-5.788 2.238-6.523 3.342-.64 6.044 1.332 6.591 4.642.654 3.962 1.21 8.074-.487 12.257m8.371-12.854c2.447.851 5.816.133 6.143 3.003.458 4.036 2.503 8.113.871 12.175-1.095 2.727-7.18 2.123-8.152-1.154-1.349-4.545-2.39-9.496 1.138-14.024"/></svg>`,
+    },
+    gamevault: {
+        name: "GAMEVAULT",
+        gradient: "linear-gradient(135deg, #4F46AF 0%, #7165D6 100%)",
+        // Rounded die faces with four/five pips and a padlock, using only three paths.
+        icon: `<svg class="icon-badge" width="${width}" height="${height}" viewBox="0 0 32 32" fill="white" fill-rule="evenodd" xmlns="http://www.w3.org/2000/svg"><path transform="matrix(.866 .5 -.866 .5 16 1)" d="M2 0h10q2 0 2 2v10q0 2-2 2H2q-2 0-2-2V2q0-2 2-2ZM2.75 4a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0ZM8.75 4a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0ZM2.75 10a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0ZM8.75 10a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0Z"/><path transform="matrix(.866 .5 0 1 3.5 9.5)" d="M2 0h10q2 0 2 2v10q0 2-2 2H2q-2 0-2-2V2q0-2 2-2ZM3 6h1V4a3 3 0 0 1 6 0v2h1v6H3ZM5.5 6h3V4a1.5 1.5 0 0 0-3 0ZM6 9a1 1 0 1 1 1.5.87L8 11H6l.5-1.13A1 1 0 0 1 6 9Z"/><path transform="matrix(.866 -.5 0 1 17 16.5)" d="M2 0h10q2 0 2 2v10q0 2-2 2H2q-2 0-2-2V2q0-2 2-2ZM2.75 4a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0ZM8.75 4a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0ZM5.75 7a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0ZM2.75 10a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0ZM8.75 10a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0Z"/></svg>`,
+    },
+    sideloaded: {
+        name: "SIDELOADED",
+        gradient: "linear-gradient(135deg, #475569 0%, #64748B 100%)",
+        icon: `<svg class="icon-badge" width="${width}" height="${height}" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M11 3h2v9l3-3 1.5 1.5L12 16l-5.5-5.5L8 9l3 3ZM3 15h2v5h14v-5h2v7H3Z"/></svg>`,
+    },
     default: {
         name: "NON-STEAM",
         gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
@@ -427,7 +493,6 @@ function getBadgeStyle(gameStore, prop) {
     return BADGE_STYLES?.[gameStore]?.[prop] || BADGE_STYLES?.default?.[prop];
 }
 function getBadgeIcon(gameStore, context) {
-    log("getBadgeIcon", `gameStore: ${gameStore}, context: ${context}`);
     return getBadgeStyle(gameStore, GameStoreProp.ICON);
 }
 
@@ -460,6 +525,48 @@ const POSITION_PREPARED_ATTR = "data-nonsteam-badge-positioned";
 // Track which elements already have badges
 let badgedElements = new WeakSet();
 let capsuleRenderCache = new WeakMap();
+function escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+function getCollectionHeadingStore(capsule, bigPicWindow) {
+    try {
+        const tabPanel = capsule.closest('div[role="tabpanel"]');
+        if (!tabPanel)
+            return undefined;
+        const candidateElements = Array.from(tabPanel.querySelectorAll("h1, h2, h3, div, span")).filter((element) => {
+            if (!(element instanceof HTMLElement))
+                return false;
+            if (element.closest('div[role="gridcell"], div[role="link"], button, a')) {
+                return false;
+            }
+            const text = element.innerText?.trim();
+            if (!text || text.length > 40)
+                return false;
+            return true;
+        });
+        const seenStores = new Set();
+        for (const element of candidateElements) {
+            const text = element.textContent?.trim();
+            if (!text)
+                continue;
+            for (const [store, aliases] of Object.entries(storeMappings)) {
+                for (const alias of aliases) {
+                    const regex = new RegExp(`^${escapeRegExp(alias)}$`, "i");
+                    if (regex.test(text)) {
+                        const sanitized = sanitizedGameStoreName(store);
+                        if (sanitized) {
+                            seenStores.add(sanitized);
+                        }
+                    }
+                }
+            }
+        }
+        return seenStores.size === 1 ? [...seenStores][0] : undefined;
+    }
+    catch {
+        return undefined;
+    }
+}
 /**
  * Remove existing badges from DOM
  */
@@ -582,9 +689,13 @@ function addBadgeToCapsule(capsule, bigPicWindow, context = GameStoreContext.LIB
     }
     // Clean up any improperly attached or orphaned badges before proceeding
     let appid = existingBadge?.getAttribute("data-appid") || getAppId(capsule);
+    let forcedCollectionStore;
     // If we can't find a Steam ID through any method (no artwork URL, no visible anchor tag, no fiber prop),
     // Native Steam games NEVER have a missing ID. So it is inherently a generic/blank non-Steam app.
     if (!appid) {
+        if (context === GameStoreContext.LIBRARY) {
+            forcedCollectionStore = getCollectionHeadingStore(capsule);
+        }
         appid = "unknown_generic_app";
     }
     else if (!isNonSteamApp(appid)) {
@@ -642,10 +753,9 @@ function addBadgeToCapsule(capsule, bigPicWindow, context = GameStoreContext.LIB
         targetElement.setAttribute(POSITION_PREPARED_ATTR, "true");
     }
     // Check if we have a store name mapping for this 'appid'
-    const cachedGameStoreName = getStore(appid)?.toLowerCase();
+    const cachedGameStoreName = forcedCollectionStore || sanitizedGameStoreName(getStore(appid)?.toLowerCase());
     const gameStoreName = sanitizedGameStoreName(cachedGameStoreName);
     const collectionVersion = getCollectionVersion();
-    log(context, `Adding badge to capsule. Store name: ${gameStoreName}`);
     // Determine the capsules context
     let effectiveContext = context;
     const cachedContext = existingBadge?.getAttribute("data-context");
@@ -655,9 +765,6 @@ function addBadgeToCapsule(capsule, bigPicWindow, context = GameStoreContext.LIB
     else if (effectiveContext === GameStoreContext.LIBRARY && img) {
         const rect = img.getBoundingClientRect();
         effectiveContext = getEffectiveCapsuleContext(effectiveContext, rect);
-        if (effectiveContext === GameStoreContext.SEARCH) {
-            log(context, `Detected landscaped capsule for appid ${appid}, using SEARCH context`);
-        }
     }
     const positionStyles = getCapsuleBadgeClassKeys(effectiveContext, settings)
         .map((classKey) => styles$1[classKey])
@@ -693,11 +800,10 @@ function addBadgeToCapsule(capsule, bigPicWindow, context = GameStoreContext.LIB
     }
     badgedElements.add(capsule);
     if (gameStoreName) {
-        log(context, `Got a game store name for appid ${appid}: ${gameStoreName}. Injecting badge icon into the DOM.`);
         // Inject the badge icon in the DOM
         if (badge.getAttribute("data-store") !== gameStoreName ||
             !existingBadge) {
-            badge.innerHTML = getBadgeIcon(gameStoreName, effectiveContext);
+            badge.innerHTML = getBadgeIcon(gameStoreName);
             badge.setAttribute("data-store", gameStoreName);
         }
         badge.classList.remove(styles$1[PULSATING_CLASSNAME]);
@@ -708,11 +814,10 @@ function addBadgeToCapsule(capsule, bigPicWindow, context = GameStoreContext.LIB
         });
     }
     else {
-        log(context, `No game store name for appid ${appid}: ${gameStoreName}. Falling back to default	while fetching.`);
         // If we don't have a cached store name, show placeholder and pulse while fetching
         if (badge.getAttribute("data-store") !== GameStoreName.DEFAULT ||
             !existingBadge) {
-            badge.innerHTML = getBadgeIcon(GameStoreName.DEFAULT, effectiveContext);
+            badge.innerHTML = getBadgeIcon(GameStoreName.DEFAULT);
             badge.setAttribute("data-store", GameStoreName.DEFAULT);
         }
         badge.classList.add(styles$1[PULSATING_CLASSNAME]);
@@ -729,7 +834,7 @@ function addBadgeToCapsule(capsule, bigPicWindow, context = GameStoreContext.LIB
                 badge.classList.remove(styles$1[PULSATING_CLASSNAME]);
                 const newName = sanitizedGameStoreName(newStore);
                 if (newName) {
-                    badge.innerHTML = getBadgeIcon(newName, effectiveContext);
+                    badge.innerHTML = getBadgeIcon(newName);
                     badge.setAttribute("data-store", newName);
                     capsuleRenderCache.set(capsule, {
                         appid: String(appid),
@@ -750,11 +855,11 @@ function addBadgeToCapsule(capsule, bigPicWindow, context = GameStoreContext.LIB
     }
 }
 
-const context$3 = "observer";
 let observer = null;
-let scanInterval = null;
 let retryTimeout = null;
 let visibilityTimeout = null;
+let backupScanTimeouts = new Set();
+let lastViewSignature = "";
 let debounceTimeout = null;
 let visibilityDocument = null;
 let visibilityChangeHandler = null;
@@ -766,7 +871,48 @@ const debouncedScan = () => {
         debounceTimeout = null;
     });
 };
+function scheduleBackupScans(delays) {
+    backupScanTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+    backupScanTimeouts.clear();
+    delays.forEach((delay) => {
+        const timeoutId = window.setTimeout(() => {
+            backupScanTimeouts.delete(timeoutId);
+            scanAndBadge();
+        }, delay);
+        backupScanTimeouts.add(timeoutId);
+    });
+}
 let cachedWindow = null;
+function getVisibleTextSignature(bigPicWindow) {
+    const visiblePanels = Array.from(bigPicWindow.document.querySelectorAll('div[role="tabpanel"]')).filter((panel) => {
+        if (!(panel instanceof HTMLElement))
+            return false;
+        return panel.offsetParent !== null;
+    });
+    const selectedTabs = Array.from(bigPicWindow.document.querySelectorAll('[aria-selected="true"], [aria-pressed="true"]'))
+        .map((element) => element.textContent?.trim())
+        .filter(Boolean)
+        .slice(0, 5);
+    const panelHeadings = visiblePanels
+        .flatMap((panel) => Array.from(panel.querySelectorAll("h1, h2, h3, [role='heading']"))
+        .map((element) => element.textContent?.trim())
+        .filter(Boolean)
+        .slice(0, 5))
+        .slice(0, 8);
+    const gridCounts = visiblePanels.map((panel) => panel.querySelectorAll('div[role="gridcell"], div[role="listitem"]').length);
+    return JSON.stringify({
+        tabs: selectedTabs,
+        headings: panelHeadings,
+        counts: gridCounts,
+    });
+}
+function scheduleViewTransitionScans(bigPicWindow) {
+    const nextSignature = getVisibleTextSignature(bigPicWindow);
+    if (nextSignature === lastViewSignature)
+        return;
+    lastViewSignature = nextSignature;
+    scheduleBackupScans([0, 300, 1000, 2000]);
+}
 /**
  * Get the Big Picture window from Decky's navigation trees
  */
@@ -795,7 +941,6 @@ function getBigPictureWindow() {
         }
     }
     catch (error) {
-        log(context$3, "Error getting Big Picture window:", "error");
     }
     return null;
 }
@@ -804,7 +949,6 @@ function startObserving() {
     stopObserving();
     const bigPicWindow = getBigPictureWindow();
     if (!bigPicWindow) {
-        log(context$3, "Big Picture window not found, retrying...");
         retryTimeout = window.setTimeout(() => {
             retryTimeout = null;
             startObserving();
@@ -813,11 +957,12 @@ function startObserving() {
     }
     // Initial scan
     scanAndBadge();
+    lastViewSignature = getVisibleTextSignature(bigPicWindow);
     // Set up MutationObserver for instant badge injection
     observer = new MutationObserver((mutations) => {
-        // Only scan if elements were added
-        const hasAddedNodes = mutations.some((m) => m.addedNodes.length > 0);
-        if (hasAddedNodes) {
+        const hasStructuralChanges = mutations.some((m) => m.addedNodes.length > 0 || m.removedNodes.length > 0);
+        if (hasStructuralChanges) {
+            scheduleViewTransitionScans(bigPicWindow);
             debouncedScan();
         }
     });
@@ -830,11 +975,9 @@ function startObserving() {
             });
         }
     });
-    if (containers.length > 0) {
-        log(context$3, "Observer attached to containers");
-    }
-    // Backup: scan every 2 seconds to catch anything missed
-    scanInterval = setInterval(scanAndBadge, 2000);
+    // Steam often finishes virtualized rendering shortly after the first observer tick.
+    // Run a small burst of follow-up scans instead of a permanent polling loop.
+    scheduleBackupScans([250, 1000, 2500]);
     // Visibility change listener
     visibilityDocument = bigPicWindow.document;
     visibilityChangeHandler = () => {
@@ -844,6 +987,7 @@ function startObserving() {
             }
             visibilityTimeout = window.setTimeout(() => {
                 visibilityTimeout = null;
+                scheduleViewTransitionScans(bigPicWindow);
                 scanAndBadge();
             }, 100);
         }
@@ -854,10 +998,6 @@ function stopObserving() {
     if (observer) {
         observer.disconnect();
         observer = null;
-    }
-    if (scanInterval) {
-        clearInterval(scanInterval);
-        scanInterval = null;
     }
     if (retryTimeout) {
         clearTimeout(retryTimeout);
@@ -871,6 +1011,9 @@ function stopObserving() {
         cancelAnimationFrame(debounceTimeout);
         debounceTimeout = null;
     }
+    backupScanTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+    backupScanTimeouts.clear();
+    lastViewSignature = "";
     if (visibilityDocument && visibilityChangeHandler) {
         visibilityDocument.removeEventListener("visibilitychange", visibilityChangeHandler);
     }
@@ -891,13 +1034,10 @@ function scanAndBadge() {
             context: GameStoreContext.HOME,
         },
     ];
-    // Scan both grid (library) and list items (home carousel)
-    const selectors = contexts.map((c) => c.selector);
     // Ensure styles are available in this window
     injectStyleIntoWindow(bigPicWindow);
-    for (const selector of selectors) {
+    for (const { selector, context } of contexts) {
         const capsules = bigPicWindow.document.querySelectorAll(selector);
-        const context = contexts.find((c) => c.selector === selector)?.context;
         capsules.forEach((capsule) => {
             // True game capsules contain a clickable wrapper with role="link".
             if (capsule.querySelector('div[role="link"]')) {
@@ -912,17 +1052,17 @@ function scanAndBadge() {
     }
 }
 
-const context$2 = "useSettings";
+const context$1 = "useSettings";
 function useSettings() {
     const [settings, setSettings] = SP_REACT.useState(getSettings());
     SP_REACT.useEffect(() => {
         const handleChange = (event) => {
             if (event instanceof CustomEvent && event.detail) {
-                log(context$2, "Settings changed (custom event): " + JSON.stringify(event.detail));
+                log(context$1, "Settings changed (custom event): " + JSON.stringify(event.detail));
                 setSettings(event.detail);
             }
             else {
-                log(context$2, "Settings changed (fallback): " + JSON.stringify(getSettings()));
+                log(context$1, "Settings changed (fallback): " + JSON.stringify(getSettings()));
                 setSettings(getSettings());
             }
         };
@@ -979,13 +1119,7 @@ const Settings = () => {
                             value: checked,
                         });
                     } })),
-            (SP_REACT.createElement(DFL.PanelSectionRow, null,
-                SP_REACT.createElement(DFL.ToggleField, { label: "Disable Badges", description: "Dev-only toggle to disable badge rendering for performance checks", checked: settings.disableBadges, onChange: (checked) => {
-                        updateSetting({
-                            key: "disableBadges",
-                            value: checked,
-                        });
-                    } }))) )));
+            null)));
 };
 var Settings$1 = Settings;
 
@@ -1082,7 +1216,7 @@ function SteamStoreButton({ steamAppId, }) {
                 SP_REACT.createElement(LiaExternalLinkAltSolid, null)))));
 }
 
-const context$1 = GameStoreContext.DETAILS;
+const context = GameStoreContext.DETAILS;
 function GameDetailsBadge() {
     const settings = useSettings();
     const [steamAppId, setSteamAppId] = SP_REACT.useState(null);
@@ -1092,9 +1226,9 @@ function GameDetailsBadge() {
     const currentPath = window.location.pathname;
     const match = currentPath.match(/\/library\/app\/(\d+)/);
     const appid = match ? match[1] : null;
-    log(context$1, `Badge appid: ${appid}`);
+    log(context);
     SP_REACT.useEffect(() => {
-        log(context$1, "Badge settings: " + JSON.stringify(settings));
+        log(context, "Badge settings: " + JSON.stringify(settings));
         // If setting is disabled, clear any existing ID and stop.
         if (settings.disableBadges || !settings.showSteamStoreButton) {
             setSteamAppId(null);
@@ -1103,7 +1237,7 @@ function GameDetailsBadge() {
     // Fetch gameStore info from backend via cache
     SP_REACT.useEffect(() => {
         if (!appid || !isNonSteamApp(appid)) {
-            log(context$1, `Details page useEffect skipping - not a non-Steam app: ${appid}`);
+            log(context);
             setLoading(false);
             return;
         }
@@ -1117,7 +1251,7 @@ function GameDetailsBadge() {
         setLoading(true);
         setGameStore(null);
         setSteamAppId(null);
-        log(context$1, "Details page useEffect - ensuring mappings loaded");
+        log(context);
         (async () => {
             await ensureMappingsLoaded();
             if (cancelled)
@@ -1126,25 +1260,25 @@ function GameDetailsBadge() {
             const name = getName(appid);
             if (store) {
                 setGameStore(store);
-                log(context$1, `Identified Store via Cache: ${store}`);
+                log(context);
             }
             else {
-                log(context$1, `AppID ${appid} not found in cache.`);
+                log(context);
             }
             if (cancelled)
                 return;
             setLoading(false);
             if (name && settings.showSteamStoreButton) {
-                log(context$1, `Searching for Steam AppID using name: ${name}`);
+                log(context);
                 const steamId = await call("search_steam_id", name);
                 if (cancelled)
                     return;
                 if (steamId) {
                     setSteamAppId(steamId);
-                    log(context$1, `Found Steam AppID: ${steamId}`);
+                    log(context);
                 }
                 else {
-                    log(context$1, `Could not find Steam AppID for ${name}`);
+                    log(context);
                 }
             }
         })();
@@ -1158,11 +1292,11 @@ function GameDetailsBadge() {
     }
     const gameStoreName = sanitizedGameStoreName(gameStore) ?? GameStoreName.DEFAULT;
     const badge = loading
-        ? getBadgeIcon(GameStoreName.DEFAULT, GameStoreContext.DETAILS)
-        : getBadgeIcon(gameStoreName, GameStoreContext.DETAILS);
+        ? getBadgeIcon(GameStoreName.DEFAULT)
+        : getBadgeIcon(gameStoreName);
     if (loading)
-        log(context$1, `Badge is loading`);
-    log(context$1, `Badge valid: ${!!badge}`);
+        log(context);
+    log(context);
     // If badge position is disabled but button is enabled, default button to top-left position
     const badgePositionStyle = styles$1[getDetailsBadgePositionClassKey(settings.detailsPosition, settings.showSteamStoreButton)];
     return (SP_REACT.createElement(SP_REACT.Fragment, null,
@@ -1171,7 +1305,6 @@ function GameDetailsBadge() {
             steamAppId && SP_REACT.createElement(SteamStoreButton, { steamAppId: steamAppId }))));
 }
 
-const context = GameStoreContext.DETAILS;
 let cleanupRenderPatch = null;
 let patchedRouteProps = null;
 function cleanupGameDetailsPatches() {
@@ -1195,7 +1328,6 @@ const patchGameDetails = (tree) => {
             const container = DFL.findInReactTree(ret, (x) => Array.isArray(x?.props?.children) &&
                 x?.props?.className?.includes(DFL.appDetailsClasses.InnerContainer));
             if (typeof container !== "object") {
-                log(context, "Patch FAILED to find container in 'ret'.");
                 return ret;
             }
             container.props.children.splice(1, 0, SP_REACT.createElement(GameDetailsBadge, null));
@@ -1232,29 +1364,15 @@ var index = definePlugin(() => {
     const settings = getSettings();
     const startupTimeouts = new Set();
     const routeMonitorIntervalMs = 500;
-    let routeLoggerInterval;
     let routeMonitorInterval;
     let observerActive = false;
     // Warm the store cache early so visible capsules can render final badges immediately.
     void ensureMappingsLoaded();
-    {
-        let lastPathname = window.location.pathname;
-        log("debug", `Current pathname: ${lastPathname}`);
-        routeLoggerInterval = window.setInterval(() => {
-            const currentPathname = window.location.pathname;
-            if (currentPathname === lastPathname) {
-                return;
-            }
-            lastPathname = currentPathname;
-            log("debug", `Pathname changed: ${currentPathname}`);
-        }, 500);
-    }
     const canObserveCurrentSettings = () => shouldObserveDomBadges(getSettings());
     const stopObserverForCurrentRoute = () => {
         if (!observerActive) {
             return;
         }
-        log("debug", `Stopping DOM observer on route: ${window.location.pathname}`);
         stopObserving();
         observerActive = false;
     };
@@ -1265,7 +1383,6 @@ var index = definePlugin(() => {
         const timeoutId = window.setTimeout(() => {
             startupTimeouts.delete(timeoutId);
             if (canObserveCurrentSettings() && isObserverRoute(window.location.pathname)) {
-                log("debug", `Starting DOM observer on route: ${window.location.pathname}`);
                 startObserving();
                 observerActive = true;
             }
@@ -1288,7 +1405,6 @@ var index = definePlugin(() => {
     };
     // Patch library and home carousel (DOM-based)
     const handleLibraryPatch = (tree) => {
-        log(GameStoreContext.LIBRARY, "Library patch applied. Listening ...");
         scheduleObservationStart();
         return tree;
     };
@@ -1300,7 +1416,6 @@ var index = definePlugin(() => {
     };
     // Patch search results (DOM-based)
     const handleSearchPatch = (tree) => {
-        log(GameStoreContext.SEARCH, "Search patch applied. Listening ...");
         scheduleObservationStart();
         return tree;
     };
@@ -1315,7 +1430,6 @@ var index = definePlugin(() => {
         if (settings.detailsPosition === "none") {
             return;
         }
-        log(GameStoreContext.DETAILS, "Game details patching ...");
         return routerHook.addPatch("/library/app/:appid", patchGameDetails);
     };
     const handleSettingsChange = () => {
@@ -1343,9 +1457,6 @@ var index = definePlugin(() => {
             startupTimeouts.clear();
             if (routeMonitorInterval) {
                 clearInterval(routeMonitorInterval);
-            }
-            if (routeLoggerInterval) {
-                clearInterval(routeLoggerInterval);
             }
             cleanupGameDetailsPatches();
             // Remove patches

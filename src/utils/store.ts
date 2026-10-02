@@ -12,6 +12,10 @@ function gameStoreIsValid(gameStore: string): gameStore is GameStoreName {
     GameStoreName.UBISOFT,
     GameStoreName.XBOX,
     GameStoreName.EA,
+    GameStoreName.ITCH,
+    GameStoreName.EMULATORS,
+    GameStoreName.GAMEVAULT,
+    GameStoreName.SIDELOADED,
     GameStoreName.DEFAULT,
   ].includes(gameStore as GameStoreName);
 }

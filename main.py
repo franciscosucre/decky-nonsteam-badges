@@ -193,7 +193,11 @@ class Plugin:
                     "rockstar": ["rockstar", "rockstar games", "rockstargames", "social club"],
                     "ubisoft": ["ubisoft", "uplay"],
                     "xbox": ["xbox", "microsoft"],
-                    "ea": ["ea", "origin", "electronic arts", "electronicarts"]
+                    "ea": ["ea", "origin", "electronic arts", "electronicarts"],
+                    "itch": ["itch", "itch.io", "itchio"],
+                    "emulators": ["emu", "roms", "emulators", "retro"],
+                    "gamevault": ["gamevault", "game vault"],
+                    "sideloaded": ["sideloaded", "side-loaded", "side loaded"]
                 }
 
             with open(shortcuts_path, "rb") as f:
