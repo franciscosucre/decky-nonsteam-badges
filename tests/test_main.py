@@ -279,6 +279,10 @@ class StoreMappingTests(unittest.TestCase):
             "28": {"appid": 313131313, "Exe": "/games/plain/game.exe"},
             "29": {"appid": 323232323, "Exe": "/games/plain/game.exe"},
             "30": {"appid": 333333334, "Exe": "/games/plain/game.exe"},
+            "31": {"appid": 343434343, "Exe": "/games/plain/game.exe"},
+            "32": {"appid": 353535353, "Exe": "/games/plain/game.exe"},
+            "33": {"appid": 363636363, "Exe": "/games/plain/game.exe"},
+            "34": {"appid": 373737373, "Exe": "/games/plain/game.exe"},
         })
         apps = {
             "121212121": {"tags": {"0": "Sideloaded"}},
@@ -294,6 +298,10 @@ class StoreMappingTests(unittest.TestCase):
             "313131313": {"tags": {"0": "Xbox360"}},
             "323232323": {"tags": {"0": "PSP"}},
             "333333334": {"tags": {"0": "PlayStation Portable"}},
+            "343434343": {"tags": {"0": "GC"}},
+            "353535353": {"tags": {"0": "GameCube"}},
+            "363636363": {"tags": {"0": "PS3"}},
+            "373737373": {"tags": {"0": "PlayStation 3"}},
         }
         fake_vdf = types.SimpleNamespace(
             load=lambda _file: {"UserLocalConfigStore": {"Software": {"Valve": {"Steam": {"apps": apps}}}}},
@@ -346,6 +354,12 @@ class StoreMappingTests(unittest.TestCase):
                 ):
                     self.assertEqual(mapping[str(appid)]["emulator"], emulator)
                 self.assertEqual(mapping["333333334"]["emulator"], "ppsspp")
+                for appid in (343434343, 353535353):
+                    self.assertEqual(mapping[str(appid)]["store"], "emulators")
+                    self.assertEqual(mapping[str(appid)]["emulator"], "dolphin")
+                for appid in (363636363, 373737373):
+                    self.assertEqual(mapping[str(appid)]["store"], "emulators")
+                    self.assertEqual(mapping[str(appid)]["emulator"], "rpcs3")
                 self.assertNotIn("emulator", mapping["181818181"])
                 self.assertEqual(mapping["252525252"]["store"], "emulators")
                 self.assertEqual(mapping["252525252"]["emulator"], "xenia")

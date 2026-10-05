@@ -58,12 +58,17 @@ def _is_emulator_launcher(exe: str, launch_options: str) -> bool:
 
 
 EMULATOR_ICON_NAMES = {
-    "retroarch": "retroarch", "dolphin-emu": "dolphin",
+    "retroarch": "retroarch", 
+    "dolphin-emu": "dolphin", 
+    "gc": "dolphin", 
+    "gamecube": "dolphin",
     "pcsx2": "pcsx2", 
     "pcsx2-qt": "pcsx2", 
     "ps2": "pcsx2", 
     "playstation 2": "pcsx2",
-    "rpcs3": "rpcs3",
+    "rpcs3": "rpcs3", 
+    "ps3": "rpcs3", 
+    "playstation 3": "rpcs3",
     "xenia": "xenia", 
     "xenia_canary": "xenia", 
     "xenia-canary": "xenia", 
