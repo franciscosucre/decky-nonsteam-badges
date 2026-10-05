@@ -3,6 +3,8 @@ const EMULATOR_COLLECTION_PATTERNS: Array<[string, RegExp]> = [
   ["dolphin", /\b(?:dolphin(?:-emu)?|gc|gamecube)\b/i],
   ["pcsx2", /\b(?:pcsx2(?:-qt)?|ps2|playstation\s+2)\b/i],
   ["rpcs3", /\b(?:rpcs3|ps3|playstation\s+3)\b/i],
+  ["duckstation", /\b(?:duckstation(?:-qt)?|ps1|playstation\s+1)\b/i],
+  ["eden", /\b(?:eden|switch|nintendo\s+switch)\b/i],
   ["xenia", /\b(?:xenia(?:[_-]canary)?|xbox\s*360)\b/i],
   ["xemu", /\bxemu\b/i],
   ["ppsspp", /\b(?:ppsspp|psp)\b/i],

@@ -283,6 +283,12 @@ class StoreMappingTests(unittest.TestCase):
             "32": {"appid": 353535353, "Exe": "/games/plain/game.exe"},
             "33": {"appid": 363636363, "Exe": "/games/plain/game.exe"},
             "34": {"appid": 373737373, "Exe": "/games/plain/game.exe"},
+            "35": {"appid": 383838383, "Exe": "/games/plain/game.exe"},
+            "36": {"appid": 393939393, "Exe": "/games/plain/game.exe"},
+            "37": {"appid": 404040404, "Exe": "/games/plain/game.exe"},
+            "38": {"appid": 414141414, "Exe": "/games/plain/game.exe"},
+            "39": {"appid": 424242424, "Exe": "/games/plain/game.exe"},
+            "40": {"appid": 434343434, "Exe": "/apps/eden"},
         })
         apps = {
             "121212121": {"tags": {"0": "Sideloaded"}},
@@ -302,6 +308,11 @@ class StoreMappingTests(unittest.TestCase):
             "353535353": {"tags": {"0": "GameCube"}},
             "363636363": {"tags": {"0": "PS3"}},
             "373737373": {"tags": {"0": "PlayStation 3"}},
+            "383838383": {"tags": {"0": "Eden"}},
+            "393939393": {"tags": {"0": "Nintendo Switch"}},
+            "404040404": {"tags": {"0": "Switch"}},
+            "414141414": {"tags": {"0": "PS1"}},
+            "424242424": {"tags": {"0": "PlayStation 1"}},
         }
         fake_vdf = types.SimpleNamespace(
             load=lambda _file: {"UserLocalConfigStore": {"Software": {"Valve": {"Steam": {"apps": apps}}}}},
@@ -343,7 +354,7 @@ class StoreMappingTests(unittest.TestCase):
                 self.assertEqual(mapping["222222223"]["emulator"], "dolphin")
                 self.assertEqual(mapping["232323232"]["emulator"], "rpcs3")
                 self.assertEqual(mapping["242424242"]["store"], "emulators")
-                self.assertNotIn("emulator", mapping["242424242"])
+                self.assertEqual(mapping["242424242"]["emulator"], "duckstation")
                 self.assertEqual(mapping["262626262"]["store"], "emulators")
                 self.assertEqual(mapping["272727272"]["emulator"], "pcsx2")
                 self.assertEqual(mapping["282828282"]["emulator"], "xenia")
@@ -360,6 +371,15 @@ class StoreMappingTests(unittest.TestCase):
                 for appid in (363636363, 373737373):
                     self.assertEqual(mapping[str(appid)]["store"], "emulators")
                     self.assertEqual(mapping[str(appid)]["emulator"], "rpcs3")
+                for appid, emulator in (
+                    (383838383, "eden"), (393939393, "eden"),
+                    (404040404, "eden"), (414141414, "duckstation"),
+                    (424242424, "duckstation"),
+                ):
+                    self.assertEqual(mapping[str(appid)]["store"], "emulators")
+                    self.assertEqual(mapping[str(appid)]["emulator"], emulator)
+                self.assertEqual(mapping["434343434"]["store"], "emulators")
+                self.assertEqual(mapping["434343434"]["emulator"], "eden")
                 self.assertNotIn("emulator", mapping["181818181"])
                 self.assertEqual(mapping["252525252"]["store"], "emulators")
                 self.assertEqual(mapping["252525252"]["emulator"], "xenia")
