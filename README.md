@@ -59,7 +59,7 @@ Emulated games use the emulator badge when a collection name, launch options, ex
 
 GameVault games match `gamevault` or `game vault`, including Unifideck launch options such as `gamevault:123`. Manually installed games can use a collection named `Sideloaded`; `side-loaded` and `side loaded` also match. These badges follow the same collection-first matching rules.
 
-Known emulator launchers are detected before generic storefront paths. Collections named `RetroArch`, `Dolphin`, `PCSX2`, `RPCS3`, `Xenia`, or `xemu` select that emulator’s badge and take priority over storefront collections. Other emulators use the generic badge.
+Known emulator launchers are detected before generic storefront paths. Collections named `RetroArch`, `Dolphin`, `PCSX2`, `RPCS3`, `DuckStation`, `Cemu`, `Eden`, `PPSSPP`, `Xenia`, or `xemu` select that emulator’s badge and take priority over storefront collections. Other emulators use the generic badge.
 
 ## Screenshots
 
