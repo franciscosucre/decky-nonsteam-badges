@@ -60,30 +60,17 @@ def _is_emulator_launcher(exe: str, launch_options: str) -> bool:
 EMULATOR_ICON_NAMES = {
     "retroarch": "retroarch", 
     "dolphin-emu": "dolphin", 
-    "gc": "dolphin", 
-    "gamecube": "dolphin",
     "pcsx2": "pcsx2", 
     "pcsx2-qt": "pcsx2", 
-    "ps2": "pcsx2", 
-    "playstation 2": "pcsx2",
     "rpcs3": "rpcs3", 
-    "ps3": "rpcs3", 
-    "playstation 3": "rpcs3",
     "duckstation": "duckstation", "duckstation-qt": "duckstation",
-    "ps1": "duckstation", "playstation 1": "duckstation",
-    "eden": "eden", "switch": "eden",
-    "nintendo switch": "eden",
+    "eden": "eden",
     "xenia": "xenia", 
     "xenia_canary": "xenia", 
     "xenia-canary": "xenia", 
-    "xbox360": "xenia", 
-    "xbox 360": "xenia",
     "xemu": "xemu", 
     "ppsspp": "ppsspp", 
-    "psp": "ppsspp", 
-    "playstation portable": "ppsspp",
 }
-
 
 DEBUG_MODE = False
 
@@ -307,7 +294,7 @@ class Plugin:
                     # 1. Check user collections (tags) first
                     for s_key, aliases in (store_aliases.items() if not store else []):
                         for alias in aliases:
-                            if re.search(r'\b' + re.escape(alias) + r'\b', tags_string):
+                            if re.search(r'\b' + re.escape(alias) + r'\b(?!\s*\d)', tags_string):
                                 store = s_key
                                 break
                         if store:
@@ -323,7 +310,7 @@ class Plugin:
                     if not store:
                         for s_key, aliases in store_aliases.items():
                             for alias in aliases:
-                                if re.search(r'\b' + re.escape(alias) + r'\b', fallback_string):
+                                if re.search(r'\b' + re.escape(alias) + r'\b(?!\s*\d)', fallback_string):
                                     store = s_key
                                     break
                             if store:

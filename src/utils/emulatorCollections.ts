@@ -1,13 +1,13 @@
 const EMULATOR_COLLECTION_PATTERNS: Array<[string, RegExp]> = [
   ["retroarch", /\bretroarch\b/i],
-  ["dolphin", /\b(?:dolphin(?:-emu)?|gc|gamecube)\b/i],
-  ["pcsx2", /\b(?:pcsx2(?:-qt)?|ps2|playstation\s+2)\b/i],
-  ["rpcs3", /\b(?:rpcs3|ps3|playstation\s+3)\b/i],
-  ["duckstation", /\b(?:duckstation(?:-qt)?|ps1|playstation\s+1)\b/i],
-  ["eden", /\b(?:eden|switch|nintendo\s+switch)\b/i],
-  ["xenia", /\b(?:xenia(?:[_-]canary)?|xbox\s*360)\b/i],
+  ["dolphin", /\bdolphin(?:-emu)?\b/i],
+  ["pcsx2", /\bpcsx2(?:-qt)?\b/i],
+  ["rpcs3", /\brpcs3\b/i],
+  ["duckstation", /\bduckstation(?:-qt)?\b/i],
+  ["eden", /\beden\b/i],
+  ["xenia", /\bxenia(?:[_-]canary)?\b/i],
   ["xemu", /\bxemu\b/i],
-  ["ppsspp", /\b(?:ppsspp|psp)\b/i],
+  ["ppsspp", /\bppsspp\b/i],
 ];
 
 export function getCollectionEmulator(name: string): string | null {

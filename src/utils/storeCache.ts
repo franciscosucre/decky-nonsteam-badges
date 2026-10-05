@@ -53,7 +53,11 @@ function collectionContainsApp(
 ): boolean {
   const candidates = getAppIdCandidates(appid);
 
-  if (apps && typeof (apps as { has?: (value: string | number) => boolean }).has === "function") {
+  if (
+    apps &&
+    typeof (apps as { has?: (value: string | number) => boolean }).has ===
+      "function"
+  ) {
     return candidates.some((candidate) =>
       (apps as { has: (value: string | number) => boolean }).has(candidate),
     );
@@ -94,10 +98,9 @@ export async function ensureMappingsLoaded(force = false): Promise<void> {
   }
 
   try {
-    const result = await call<
-      [],
-      Record<string, StoreMapping>
-    >("get_all_store_mappings");
+    const result = await call<[], Record<string, StoreMapping>>(
+      "get_all_store_mappings",
+    );
 
     if (result) {
       gameStoreMappingsCache = result;
@@ -128,7 +131,9 @@ function getFrontendMapping(appid: string): StoreMapping | null {
       return null;
     }
 
-    const userCollections = collectionStore.userCollections as any[] | undefined;
+    const userCollections = collectionStore.userCollections as
+      | any[]
+      | undefined;
     if (!userCollections) return null;
 
     const collectionStateSignature = userCollections
@@ -158,7 +163,9 @@ function getFrontendMapping(appid: string): StoreMapping | null {
     // storefront collections automatically assigned by tools such as Unifideck.
     for (const collection of userCollections) {
       if (collection.apps && collectionContainsApp(collection.apps, appid)) {
-        const emulator = getCollectionEmulator(String(collection.displayName ?? ""));
+        const emulator = getCollectionEmulator(
+          String(collection.displayName ?? ""),
+        );
         if (emulator) return { store: "emulators", emulator };
       }
     }
@@ -171,7 +178,10 @@ function getFrontendMapping(appid: string): StoreMapping | null {
             store as string
           ] || [store];
           for (const alias of aliases) {
-            const regex = new RegExp(`\\b${escapeRegExp(alias)}\\b`, "i");
+            const regex = new RegExp(
+              `\\b${escapeRegExp(alias)}\\b(?!\\s*\\d)`,
+              "i",
+            );
             if (regex.test(colName)) {
               return { store };
             }
@@ -214,7 +224,7 @@ export function getEmulator(appid: string): string | null {
   if (frontendMapping?.emulator) return frontendMapping.emulator;
   if (getStore(appid) !== "emulators") return null;
   const entry = gameStoreMappingsCache[appid];
-  return typeof entry === "object" ? entry.emulator ?? null : null;
+  return typeof entry === "object" ? (entry.emulator ?? null) : null;
 }
 
 export function getCollectionVersion(): number {

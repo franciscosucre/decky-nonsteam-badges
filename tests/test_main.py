@@ -356,30 +356,18 @@ class StoreMappingTests(unittest.TestCase):
                 self.assertEqual(mapping["242424242"]["store"], "emulators")
                 self.assertEqual(mapping["242424242"]["emulator"], "duckstation")
                 self.assertEqual(mapping["262626262"]["store"], "emulators")
-                self.assertEqual(mapping["272727272"]["emulator"], "pcsx2")
-                self.assertEqual(mapping["282828282"]["emulator"], "xenia")
                 self.assertEqual(mapping["292929292"]["emulator"], "ppsspp")
-                for appid, emulator in (
-                    (303030303, "pcsx2"), (313131313, "xenia"),
-                    (323232323, "ppsspp"),
+                for appid in (
+                    272727272, 282828282, 303030303, 313131313, 323232323,
+                    333333334, 343434343, 353535353, 363636363, 373737373,
+                    393939393, 404040404, 414141414, 424242424,
                 ):
-                    self.assertEqual(mapping[str(appid)]["emulator"], emulator)
-                self.assertEqual(mapping["333333334"]["emulator"], "ppsspp")
-                for appid in (343434343, 353535353):
-                    self.assertEqual(mapping[str(appid)]["store"], "emulators")
-                    self.assertEqual(mapping[str(appid)]["emulator"], "dolphin")
-                for appid in (363636363, 373737373):
-                    self.assertEqual(mapping[str(appid)]["store"], "emulators")
-                    self.assertEqual(mapping[str(appid)]["emulator"], "rpcs3")
-                for appid, emulator in (
-                    (383838383, "eden"), (393939393, "eden"),
-                    (404040404, "eden"), (414141414, "duckstation"),
-                    (424242424, "duckstation"),
-                ):
-                    self.assertEqual(mapping[str(appid)]["store"], "emulators")
-                    self.assertEqual(mapping[str(appid)]["emulator"], emulator)
+                    self.assertIsNone(mapping[str(appid)]["store"])
+                    self.assertNotIn("emulator", mapping[str(appid)])
                 self.assertEqual(mapping["434343434"]["store"], "emulators")
                 self.assertEqual(mapping["434343434"]["emulator"], "eden")
+                self.assertEqual(mapping["383838383"]["store"], "emulators")
+                self.assertEqual(mapping["383838383"]["emulator"], "eden")
                 self.assertNotIn("emulator", mapping["181818181"])
                 self.assertEqual(mapping["252525252"]["store"], "emulators")
                 self.assertEqual(mapping["252525252"]["emulator"], "xenia")
