@@ -9,6 +9,7 @@ test("specific emulator collections select an identity without launch metadata",
     ["PCSX2", "pcsx2"],
     ["RPCS3", "rpcs3"],
     ["DuckStation", "duckstation"],
+    ["Cemu", "cemu"],
     ["Eden", "eden"],
     ["Xenia", "xenia"],
     ["xemu", "xemu"],
@@ -21,7 +22,7 @@ test("specific emulator collections select an identity without launch metadata",
 });
 
 test("generic and unrelated collections do not select an individual emulator", () => {
-  for (const name of ["Emulators", "myxenia", "retroarchived", ""]) {
+  for (const name of ["Emulators", "mycemu", "myxenia", "retroarchived", ""]) {
     assert.equal(getCollectionEmulator(name), null);
   }
 });

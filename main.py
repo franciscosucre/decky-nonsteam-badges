@@ -65,6 +65,7 @@ EMULATOR_ICON_NAMES = {
     "rpcs3": "rpcs3", 
     "duckstation": "duckstation", 
     "duckstation-qt": "duckstation",
+    "cemu": "cemu",
     "eden": "eden",
     "xenia": "xenia", 
     "xenia_canary": "xenia", 

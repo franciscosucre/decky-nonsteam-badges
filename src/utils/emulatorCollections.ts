@@ -4,6 +4,7 @@ const EMULATOR_COLLECTION_PATTERNS: Array<[string, RegExp]> = [
   ["pcsx2", /\bpcsx2(?:-qt)?\b/i],
   ["rpcs3", /\brpcs3\b/i],
   ["duckstation", /\bduckstation(?:-qt)?\b/i],
+  ["cemu", /\bcemu\b/i],
   ["eden", /\beden\b/i],
   ["xenia", /\bxenia(?:[_-]canary)?\b/i],
   ["xemu", /\bxemu\b/i],
