@@ -59,9 +59,20 @@ def _is_emulator_launcher(exe: str, launch_options: str) -> bool:
 
 EMULATOR_ICON_NAMES = {
     "retroarch": "retroarch", "dolphin-emu": "dolphin",
-    "pcsx2": "pcsx2", "pcsx2-qt": "pcsx2", "rpcs3": "rpcs3",
-    "xenia": "xenia", "xenia_canary": "xenia", "xenia-canary": "xenia",
-    "xemu": "xemu",
+    "pcsx2": "pcsx2", 
+    "pcsx2-qt": "pcsx2", 
+    "ps2": "pcsx2", 
+    "playstation 2": "pcsx2",
+    "rpcs3": "rpcs3",
+    "xenia": "xenia", 
+    "xenia_canary": "xenia", 
+    "xenia-canary": "xenia", 
+    "xbox360": "xenia", 
+    "xbox 360": "xenia",
+    "xemu": "xemu", 
+    "ppsspp": "ppsspp", 
+    "psp": "ppsspp", 
+    "playstation portable": "ppsspp",
 }
 
 
@@ -243,7 +254,7 @@ class Plugin:
                     "xbox": ["xbox", "microsoft"],
                     "ea": ["ea", "origin", "electronic arts", "electronicarts"],
                     "itch": ["itch", "itch.io", "itchio"],
-                    "emulators": ["emu", "roms", "emulators", "retro"],
+                    "emulators": ["emu", "roms", "emulators", "emulation", "retro"],
                     "gamevault": ["gamevault", "game vault"],
                     "sideloaded": ["sideloaded", "side-loaded", "side loaded"]
                 }

@@ -51,6 +51,7 @@ class EmulatorLauncherTests(unittest.TestCase):
         for exe, options in (
             ('"C:\\Emulators\\Xenia\\xenia_canary.exe"', ''),
             ('/apps/PCSX2-Qt-v2.6.3.AppImage', ''),
+            ('/apps/PPSSPP', ''),
             ('/usr/bin/flatpak', 'run org.libretro.RetroArch'),
             ('/usr/bin/flatpak', 'run org.DolphinEmu.dolphin-emu'),
             ('/usr/bin/proton', '"/apps/xenia_canary.exe" "/games/xbox/game.iso"'),
@@ -270,6 +271,14 @@ class StoreMappingTests(unittest.TestCase):
             "20": {"appid": 232323232, "Exe": "/apps/rpcs3"},
             "21": {"appid": 242424242, "Exe": "/apps/duckstation"},
             "22": {"appid": 252525252, "Exe": "/apps/unifideck-launcher", "LaunchOptions": "microsoft:1234"},
+            "23": {"appid": 262626262, "AppName": "Emulation tagged game", "Exe": "/games/plain/game.exe"},
+            "24": {"appid": 272727272, "Exe": "/games/plain/ps2-game.exe"},
+            "25": {"appid": 282828282, "Exe": "/games/plain/xbox360-game.exe"},
+            "26": {"appid": 292929292, "Exe": "/apps/ppsspp"},
+            "27": {"appid": 303030303, "Exe": "/games/plain/game.exe"},
+            "28": {"appid": 313131313, "Exe": "/games/plain/game.exe"},
+            "29": {"appid": 323232323, "Exe": "/games/plain/game.exe"},
+            "30": {"appid": 333333334, "Exe": "/games/plain/game.exe"},
         })
         apps = {
             "121212121": {"tags": {"0": "Sideloaded"}},
@@ -278,6 +287,13 @@ class StoreMappingTests(unittest.TestCase):
             "252525252": {"tags": {"0": "Xbox", "1": "Xenia"}},
             "111111111": {"tags": {"0": "Emulators"}},
             "666666666": {"tags": {"0": "GOG"}},
+            "262626262": {"tags": {"0": "Emulation"}},
+            "272727272": {"tags": {"0": "PS2"}},
+            "282828282": {"tags": {"0": "Xbox 360"}},
+            "303030303": {"tags": {"0": "PlayStation 2"}},
+            "313131313": {"tags": {"0": "Xbox360"}},
+            "323232323": {"tags": {"0": "PSP"}},
+            "333333334": {"tags": {"0": "PlayStation Portable"}},
         }
         fake_vdf = types.SimpleNamespace(
             load=lambda _file: {"UserLocalConfigStore": {"Software": {"Valve": {"Steam": {"apps": apps}}}}},
@@ -320,6 +336,16 @@ class StoreMappingTests(unittest.TestCase):
                 self.assertEqual(mapping["232323232"]["emulator"], "rpcs3")
                 self.assertEqual(mapping["242424242"]["store"], "emulators")
                 self.assertNotIn("emulator", mapping["242424242"])
+                self.assertEqual(mapping["262626262"]["store"], "emulators")
+                self.assertEqual(mapping["272727272"]["emulator"], "pcsx2")
+                self.assertEqual(mapping["282828282"]["emulator"], "xenia")
+                self.assertEqual(mapping["292929292"]["emulator"], "ppsspp")
+                for appid, emulator in (
+                    (303030303, "pcsx2"), (313131313, "xenia"),
+                    (323232323, "ppsspp"),
+                ):
+                    self.assertEqual(mapping[str(appid)]["emulator"], emulator)
+                self.assertEqual(mapping["333333334"]["emulator"], "ppsspp")
                 self.assertNotIn("emulator", mapping["181818181"])
                 self.assertEqual(mapping["252525252"]["store"], "emulators")
                 self.assertEqual(mapping["252525252"]["emulator"], "xenia")
