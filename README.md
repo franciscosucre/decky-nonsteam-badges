@@ -44,22 +44,57 @@ If it finds matches, it overlays the relevant badge. If there are no matches, it
 The plugin looks for storefront matches in two distinct phases:
 
 **Phase 1:** Custom Overrides
+
 1. **Collection Name**: The plugin strictly searches your assigned Steam Collections first. Custom tags take absolute priority.
 
 **Phase 2:** Automated Fallbacks
-If no matches are found in your collections, it groups together the underlying program configurations to search for automated tags or installation folder names:
-2. **Target** (Executable file path)
-3. **Start In** (Installation directory)
-4. **Launch Options**
+If no matches are found in your collections, it groups together the underlying program configurations to search for automated tags or installation folder names: 2. **Target** (Executable file path) 3. **Start In** (Installation directory) 4. **Launch Options**
 
 If you use [Unifideck](https://github.com/mubaraknumann/unifideck), you shouldn't need any additional steps, since Unifideck already adds the correct collection names for non-Steam games as well as launch options.
 If you add non-Steam games to your Steam library manually or through the [Heroic Games Launcher](https://heroicgameslauncher.com/), you just need to add the correct collection names for the plugin to identify it (i.e. `gog`, `epic`, `amazon`, `rockstar`, `ubisoft`, `xbox`, `ea`, or `itch`).
 
-Emulated games use the emulator badge when a collection name, launch options, executable path, or installation directory matches `emu`, `roms`, `emulators`, or `retro`. For example, add games to a Steam collection named `Emulators`. Collection names take priority over launch metadata, using the same matching rules as storefront badges.
+Aliases are matched case-insensitively. Collection names take priority over launch metadata, using the same matching rules as storefront badges.
+
+### Store and Category Aliases
+
+These aliases identify storefronts or broad game categories in collection names, launch options, executable paths, and installation directories:
+
+| Badge or category   | Recognized aliases                                           |
+| ------------------- | ------------------------------------------------------------ |
+| GOG                 | `gog`                                                        |
+| Epic Games          | `epic`                                                       |
+| Amazon Games        | `amazon`, `luna`                                             |
+| Rockstar Games      | `rockstar`, `rockstar games`, `rockstargames`, `social club` |
+| Ubisoft             | `ubisoft`, `uplay`                                           |
+| Xbox                | `xbox`, `microsoft`                                          |
+| EA                  | `ea`, `origin`, `electronic arts`, `electronicarts`          |
+| itch.io             | `itch`, `itch.io`, `itchio`                                  |
+| Emulators (generic) | `emu`, `roms`, `emulators`, `emulation`, `retro`             |
+| GameVault           | `gamevault`, `game vault`                                    |
+| Sideloaded          | `sideloaded`, `side-loaded`, `side loaded`                   |
+
+For example, a collection named `Emulators` assigns the generic emulator badge.
 
 GameVault games match `gamevault` or `game vault`, including Unifideck launch options such as `gamevault:123`. Manually installed games can use a collection named `Sideloaded`; `side-loaded` and `side loaded` also match. These badges follow the same collection-first matching rules.
 
-Known emulator launchers are detected before generic storefront paths. Collections named `RetroArch`, `Dolphin`, `PCSX2`, `RPCS3`, `DuckStation`, `Cemu`, `Eden`, `PPSSPP`, `Xenia`, or `xemu` select that emulator’s badge and take priority over storefront collections. Other emulators use the generic badge.
+### Specific Emulator Badges
+
+Known emulator launchers are detected before generic storefront paths. These collection names and launcher identifiers select a specific emulator badge and take priority over storefront collections:
+
+| Emulator badge | Recognized names or launcher identifiers |
+| -------------- | ---------------------------------------- |
+| RetroArch      | `retroarch`                              |
+| Dolphin        | `dolphin`, `dolphin-emu`                 |
+| PCSX2          | `pcsx2`, `pcsx2-qt`                      |
+| RPCS3          | `rpcs3`                                  |
+| DuckStation    | `duckstation`, `duckstation-qt`          |
+| Cemu           | `cemu`                                   |
+| Eden           | `eden`                                   |
+| Xenia          | `xenia`, `xenia_canary`, `xenia-canary`  |
+| xemu           | `xemu`                                   |
+| PPSSPP         | `ppsspp`                                 |
+
+Other emulators use the generic Emulators badge. Console-only labels don’t identify a specific emulator.
 
 ## Screenshots
 
