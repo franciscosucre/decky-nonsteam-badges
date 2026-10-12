@@ -291,6 +291,8 @@ class StoreMappingTests(unittest.TestCase):
             "40": {"appid": 434343434, "Exe": "/apps/eden"},
             "41": {"appid": 444444445, "Exe": "/apps/cemu"},
             "42": {"appid": 444444446, "Exe": "/games/plain/game.exe"},
+            "43": {"appid": 454545454, "Exe": "/apps/citron"},
+            "44": {"appid": 464646464, "Exe": "/games/plain/game.exe"},
         })
         apps = {
             "121212121": {"tags": {"0": "Sideloaded"}},
@@ -316,6 +318,7 @@ class StoreMappingTests(unittest.TestCase):
             "414141414": {"tags": {"0": "PS1"}},
             "424242424": {"tags": {"0": "PlayStation 1"}},
             "444444446": {"tags": {"0": "Cemu"}},
+            "464646464": {"tags": {"0": "Citron"}},
         }
         fake_vdf = types.SimpleNamespace(
             load=lambda _file: {"UserLocalConfigStore": {"Software": {"Valve": {"Steam": {"apps": apps}}}}},
@@ -374,6 +377,10 @@ class StoreMappingTests(unittest.TestCase):
                 for appid in (444444445, 444444446):
                     self.assertEqual(mapping[str(appid)]["store"], "emulators")
                     self.assertEqual(mapping[str(appid)]["emulator"], "cemu")
+                self.assertEqual(mapping["454545454"]["store"], "emulators")
+                self.assertEqual(mapping["454545454"]["emulator"], "citron")
+                self.assertEqual(mapping["464646464"]["store"], "emulators")
+                self.assertEqual(mapping["464646464"]["emulator"], "citron")
                 self.assertNotIn("emulator", mapping["181818181"])
                 self.assertEqual(mapping["252525252"]["store"], "emulators")
                 self.assertEqual(mapping["252525252"]["emulator"], "xenia")

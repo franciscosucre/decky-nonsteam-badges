@@ -22,7 +22,7 @@ import decky
 EMULATOR_LAUNCHERS = (
     "xenia", "xenia_canary", "xenia-canary", "xemu", "retroarch",
     "dolphin-emu", "pcsx2", "pcsx2-qt", "rpcs3", "duckstation",
-    "duckstation-qt", "eden", "ppsspp", "ppssppqt", "mgba", "melonds",
+    "duckstation-qt", "eden", "citron", "ppsspp", "ppssppqt", "mgba", "melonds",
     "cemu", "citra", "azahar", "ryujinx", "yuzu", "flycast",
     "shadps4", "scummvm", "dosbox", "dosbox-x", "mame",
 )
@@ -67,6 +67,7 @@ EMULATOR_ICON_NAMES = {
     "duckstation-qt": "duckstation",
     "cemu": "cemu",
     "eden": "eden",
+    "citron": "citron",
     "xenia": "xenia", 
     "xenia_canary": "xenia", 
     "xenia-canary": "xenia", 

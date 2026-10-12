@@ -90,6 +90,7 @@ Known emulator launchers are detected before generic storefront paths. These col
 | DuckStation    | `duckstation`, `duckstation-qt`          |
 | Cemu           | `cemu`                                   |
 | Eden           | `eden`                                   |
+| Citron         | `citron`                                 |
 | Xenia          | `xenia`, `xenia_canary`, `xenia-canary`  |
 | xemu           | `xemu`                                   |
 | PPSSPP         | `ppsspp`                                 |
