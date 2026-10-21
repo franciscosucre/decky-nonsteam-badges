@@ -81,19 +81,21 @@ GameVault games match `gamevault` or `game vault`, including Unifideck launch op
 
 Known emulator launchers are detected before generic storefront paths. These collection names and launcher identifiers select a specific emulator badge and take priority over storefront collections:
 
-| Emulator badge | Recognized names or launcher identifiers |
-| -------------- | ---------------------------------------- |
-| RetroArch      | `retroarch`                              |
-| Dolphin        | `dolphin`, `dolphin-emu`                 |
-| PCSX2          | `pcsx2` (also `pcsx2-qt`)                |
-| RPCS3          | `rpcs3`                                  |
-| DuckStation    | `duckstation`                            |
-| Cemu           | `cemu`                                   |
-| Eden           | `eden`                                   |
-| Citron         | `citron`                                 |
-| Xenia          | `xenia` (also `xenia-canary`, `xenia_canary`) |
-| xemu           | `xemu`                                   |
-| PPSSPP         | `ppsspp` (also `ppssppqt`)               |
+| Emulator badge | Collection names         | Launcher binaries                        |
+| -------------- | ------------------------ | ---------------------------------------- |
+| RetroArch      | `retroarch`              | `retroarch`                              |
+| Dolphin        | `dolphin`, `dolphin-emu` | `dolphin-emu`                            |
+| PCSX2          | `pcsx2`                  | `pcsx2`, `pcsx2-qt`                      |
+| RPCS3          | `rpcs3`                  | `rpcs3`                                  |
+| DuckStation    | `duckstation`            | `duckstation`, `duckstation-qt`          |
+| Cemu           | `cemu`                   | `cemu`                                   |
+| Eden           | `eden`                   | `eden`                                   |
+| Citron         | `citron`                 | `citron`                                 |
+| Xenia          | `xenia`                  | `xenia`, `xenia-canary`, `xenia_canary`  |
+| xemu           | `xemu`                   | `xemu`                                   |
+| PPSSPP         | `ppsspp`                 | `ppsspp`, `ppssppqt`                     |
+
+Launcher binaries with a packaging suffix normalize to the canonical badge; they are not separate emulator identities.
 
 Other emulators use the generic Emulators badge. Console-only labels don’t identify a specific emulator.
 

@@ -88,15 +88,18 @@ class MappingRegressionTests(unittest.TestCase):
             "ppssppqt",
             "duckstation-qt",
             "pcsx2-qt",
+            "xeniaqt",
             "xenia_canary",
             "xenia-canary",
         ):
             with self.subTest(variant=variant):
                 self.assertNotIn(variant, main.EMULATOR_ICON_NAMES)
+        for exe in ("/apps/xeniaqt", "/apps/XeniaQt.exe"):
+            with self.subTest(exe=exe):
+                self.assertIsNone(main._get_emulator_launcher(exe, ""))
 
-    def test_variant_collections_select_the_canonical_emulator(self):
+    def test_separated_variant_collections_select_the_canonical_emulator(self):
         for collection, expected in (
-            ("PPSSPPQt", "ppsspp"),
             ("DuckStation-Qt", "duckstation"),
             ("PCSX2-Qt", "pcsx2"),
             ("Xenia Canary", "xenia"),
@@ -105,3 +108,6 @@ class MappingRegressionTests(unittest.TestCase):
                 entry = self.get_mapping({}, [collection])
                 self.assertEqual(entry["store"], "emulators")
                 self.assertEqual(entry.get("emulator"), expected)
+        for collection in ("PPSSPPQt", "xeniaqt"):
+            with self.subTest(collection=collection):
+                self.assertIsNone(self.get_mapping({}, [collection])["store"])

@@ -18,8 +18,6 @@ test("specific emulator collections select an identity without launch metadata",
     ["xenia_canary", "xenia"],
     ["My PCSX2 games", "pcsx2"],
     ["PPSSPP", "ppsspp"],
-    ["PPSSPPQt", "ppsspp"],
-    ["PPSSPP-Qt", "ppsspp"],
     ["PCSX2-Qt", "pcsx2"],
     ["DuckStation-Qt", "duckstation"],
   ])
@@ -27,7 +25,7 @@ test("specific emulator collections select an identity without launch metadata",
 });
 
 test("generic and unrelated collections do not select an individual emulator", () => {
-  for (const name of ["Emulators", "mycemu", "myxenia", "retroarchived", ""]) {
+  for (const name of ["Emulators", "mycemu", "myxenia", "retroarchived", "PPSSPPQt", "xeniaqt", ""]) {
     assert.equal(getCollectionEmulator(name), null);
   }
 });

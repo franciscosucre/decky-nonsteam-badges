@@ -29,16 +29,28 @@ EMULATOR_LAUNCHERS = (
     "shadps4", "scummvm", "dosbox", "dosbox-x", "mame",
 )
 
-# Optional packaging markers that follow a canonical launcher name.
-LAUNCHER_VARIANT = r"(?:[-_.]?(?:qt|canary))?"
+# Known launcher binaries that are packaged with a suffix. They normalize to the
+# canonical name and never become separate emulator identities.
+EMULATOR_LAUNCHER_VARIANTS = {
+    "pcsx2": ("-qt",),
+    "duckstation": ("-qt",),
+    "ppsspp": ("qt",),
+    "xenia": ("_canary", "-canary"),
+}
 
 # Optional version suffix, e.g. "pcsx2-v2.6.3".
 LAUNCHER_VERSION = r"(?:-v?\d+(?:[.-]\d+)*(?:-[a-z0-9]+)?)?"
 
 
 def _launcher_pattern(launcher: str) -> str:
-    """Match a canonical launcher name with its optional variant and version."""
-    return re.escape(launcher) + LAUNCHER_VARIANT + LAUNCHER_VERSION
+    """Match a canonical launcher name and its known packaging suffixes."""
+    variants = EMULATOR_LAUNCHER_VARIANTS.get(launcher, ())
+    variant_pattern = (
+        "(?:" + "|".join(re.escape(variant) for variant in variants) + ")?"
+        if variants
+        else ""
+    )
+    return re.escape(launcher) + variant_pattern + LAUNCHER_VERSION
 
 
 def _get_emulator_launcher(exe: str, launch_options: str) -> str | None:
@@ -307,9 +319,7 @@ class Plugin:
                     # Specific emulator collections override automatically assigned store tags.
                     collection_emulator = None
                     for alias, icon in {**EMULATOR_ICON_NAMES, "dolphin": "dolphin"}.items():
-                        if re.search(
-                            r'\b' + re.escape(alias) + LAUNCHER_VARIANT + r'\b', tags_string
-                        ):
+                        if re.search(r'\b' + re.escape(alias) + r'\b', tags_string):
                             collection_emulator = icon
                             store = "emulators"
                             break

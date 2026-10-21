@@ -69,16 +69,16 @@ function log(context, message, level = "log") {
 
 const EMULATOR_COLLECTION_PATTERNS = [
     ["retroarch", /\bretroarch\b/i],
-    ["dolphin", /\bdolphin(?:[-_.]?emu)?\b/i],
-    ["pcsx2", /\bpcsx2(?:[-_.]?qt)?\b/i],
+    ["dolphin", /\bdolphin(?:-emu)?\b/i],
+    ["pcsx2", /\bpcsx2\b/i],
     ["rpcs3", /\brpcs3\b/i],
     ["duckstation", /\bduckstation\b/i],
     ["cemu", /\bcemu\b/i],
     ["eden", /\beden\b/i],
     ["citron", /\bcitron\b/i],
-    ["xenia", /\bxenia(?:[-_.]?(?:qt|canary))?\b/i],
+    ["xenia", /\bxenia(?:[_-]canary)?\b/i],
     ["xemu", /\bxemu\b/i],
-    ["ppsspp", /\bppsspp(?:[-_.]?qt)?\b/i],
+    ["ppsspp", /\bppsspp\b/i],
 ];
 function getCollectionEmulator(name) {
     return (EMULATOR_COLLECTION_PATTERNS.find(([, pattern]) => pattern.test(name))?.[0] ?? null);
