@@ -2,12 +2,13 @@
 set -euo pipefail
 
 # Packages a directory staged by build-plugin-content.sh into a Decky Loader TAR.
-# Usage: build-plugin-tar.sh [CONTENT_DIR] [OUTPUT_FILE]
+# Usage: build-plugin-tar.sh [CONTENT_DIR=decky-nonsteam-badges] [OUTPUT_FILE=decky-nonsteam-badges.tar.gz]
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
+PLUGIN_NAME="decky-nonsteam-badges"
 
-CONTENT_DIR="${1:-$REPO_ROOT/decky-nonsteam-badges}"
-OUTPUT_FILE="${2:-$REPO_ROOT/decky-nonsteam-badges.tar.gz}"
+CONTENT_DIR="${1:-$REPO_ROOT/$PLUGIN_NAME}"
+OUTPUT_FILE="${2:-$REPO_ROOT/$PLUGIN_NAME.tar.gz}"
 
 if ! command -v tar >/dev/null 2>&1; then
 	echo "Error: tar is required to create the Decky Loader archive." >&2
@@ -24,10 +25,10 @@ CONTENT_DIR="$(cd "$CONTENT_DIR" && pwd)"
 mkdir -p "$(dirname "$OUTPUT_FILE")"
 OUTPUT_FILE="$(cd "$(dirname "$OUTPUT_FILE")" && pwd)/$(basename "$OUTPUT_FILE")"
 
-PLUGIN_NAME="$(basename "$CONTENT_DIR")"
+CONTENT_NAME="$(basename "$CONTENT_DIR")"
 PARENT_DIR="$(dirname "$CONTENT_DIR")"
 
 echo "Packaging Decky Loader plugin TAR..." >&2
 rm -f "$OUTPUT_FILE"
-tar -czf "$OUTPUT_FILE" -C "$PARENT_DIR" "$PLUGIN_NAME"
+tar -czf "$OUTPUT_FILE" -C "$PARENT_DIR" "$CONTENT_NAME"
 echo "Created $OUTPUT_FILE"

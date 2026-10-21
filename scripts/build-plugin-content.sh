@@ -6,7 +6,7 @@ REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
 PLUGIN_NAME="decky-nonsteam-badges"
 
 # Directory that will contain the staged "decky-nonsteam-badges/" folder.
-OUTPUT_DIR="${1:-.}"
+OUTPUT_DIR="${1:-$REPO_ROOT}"
 mkdir -p "$OUTPUT_DIR"
 OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
 

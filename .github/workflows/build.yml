@@ -34,12 +34,12 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Stage plugin content
-        run: bash scripts/build-plugin-content.sh .
+        run: bash scripts/build-plugin-content.sh
 
       - name: Build plugin bundles
         run: |
-          bash scripts/build-plugin-zip.sh decky-nonsteam-badges decky-nonsteam-badges.zip
-          bash scripts/build-plugin-tar.sh decky-nonsteam-badges decky-nonsteam-badges.tar.gz
+          bash scripts/build-plugin-zip.sh
+          bash scripts/build-plugin-tar.sh
 
       - name: Upload package
         uses: actions/upload-artifact@v4
