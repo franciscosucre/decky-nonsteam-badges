@@ -69,16 +69,16 @@ function log(context, message, level = "log") {
 
 const EMULATOR_COLLECTION_PATTERNS = [
     ["retroarch", /\bretroarch\b/i],
-    ["dolphin", /\bdolphin(?:-emu)?\b/i],
-    ["pcsx2", /\bpcsx2(?:-qt)?\b/i],
+    ["dolphin", /\bdolphin(?:[-_.]?emu)?\b/i],
+    ["pcsx2", /\bpcsx2(?:[-_.]?qt)?\b/i],
     ["rpcs3", /\brpcs3\b/i],
-    ["duckstation", /\bduckstation(?:-qt)?\b/i],
+    ["duckstation", /\bduckstation\b/i],
     ["cemu", /\bcemu\b/i],
     ["eden", /\beden\b/i],
     ["citron", /\bcitron\b/i],
-    ["xenia", /\bxenia(?:[_-]canary)?\b/i],
+    ["xenia", /\bxenia(?:[-_.]?(?:qt|canary))?\b/i],
     ["xemu", /\bxemu\b/i],
-    ["ppsspp", /\bppsspp\b/i],
+    ["ppsspp", /\bppsspp(?:[-_.]?qt)?\b/i],
 ];
 function getCollectionEmulator(name) {
     return (EMULATOR_COLLECTION_PATTERNS.find(([, pattern]) => pattern.test(name))?.[0] ?? null);
@@ -151,6 +151,9 @@ var storeMappings = {
 
 const context$3 = "cache";
 const CACHE_TTL_MS = 60 * 1000; // 1 minute
+// Store aliases that also name a console, so a trailing number means a console
+// collection such as "Xbox 360" instead of the storefront.
+const CONSOLE_LABEL_ALIASES = new Set(["xbox"]);
 let gameStoreMappingsCache = {};
 let mappingsLoaded = false;
 let isFetchingMappings = false;
@@ -267,7 +270,11 @@ function getFrontendMapping(appid) {
                 for (const store of supportedStores) {
                     const aliases = storeMappings[store] || [store];
                     for (const alias of aliases) {
-                        const regex = new RegExp(`\\b${escapeRegExp$1(alias)}\\b(?!\\s*\\d)`, "i");
+                        let pattern = `\\b${escapeRegExp$1(alias)}\\b`;
+                        if (CONSOLE_LABEL_ALIASES.has(alias.toLowerCase())) {
+                            pattern += `(?!\\s*\\d)`;
+                        }
+                        const regex = new RegExp(pattern, "i");
                         if (regex.test(colName)) {
                             return { store };
                         }

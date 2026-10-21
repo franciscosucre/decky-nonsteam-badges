@@ -14,6 +14,10 @@ const context = "cache";
 
 const CACHE_TTL_MS = 60 * 1000; // 1 minute
 
+// Store aliases that also name a console, so a trailing number means a console
+// collection such as "Xbox 360" instead of the storefront.
+const CONSOLE_LABEL_ALIASES = new Set(["xbox"]);
+
 let gameStoreMappingsCache: Record<string, StoreMapping | string> = {};
 let mappingsLoaded = false;
 let isFetchingMappings = false;
@@ -178,10 +182,11 @@ function getFrontendMapping(appid: string): StoreMapping | null {
             store as string
           ] || [store];
           for (const alias of aliases) {
-            const regex = new RegExp(
-              `\\b${escapeRegExp(alias)}\\b(?!\\s*\\d)`,
-              "i",
-            );
+            let pattern = `\\b${escapeRegExp(alias)}\\b`;
+            if (CONSOLE_LABEL_ALIASES.has(alias.toLowerCase())) {
+              pattern += `(?!\\s*\\d)`;
+            }
+            const regex = new RegExp(pattern, "i");
             if (regex.test(colName)) {
               return { store };
             }

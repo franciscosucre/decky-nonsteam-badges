@@ -18,6 +18,10 @@ test("specific emulator collections select an identity without launch metadata",
     ["xenia_canary", "xenia"],
     ["My PCSX2 games", "pcsx2"],
     ["PPSSPP", "ppsspp"],
+    ["PPSSPPQt", "ppsspp"],
+    ["PPSSPP-Qt", "ppsspp"],
+    ["PCSX2-Qt", "pcsx2"],
+    ["DuckStation-Qt", "duckstation"],
   ])
     assert.equal(getCollectionEmulator(name), expected);
 });

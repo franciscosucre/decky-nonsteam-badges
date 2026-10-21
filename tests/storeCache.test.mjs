@@ -44,3 +44,19 @@ for (const [collection, expected] of [['GOG 2026', 'gog'], ['Epic 2025', 'epic']
     }
   });
 }
+
+for (const [collection, expected] of [['Xbox 360', null], ['Xbox360', null], ['Xbox', 'xbox']]) {
+  test(`Xbox console collection ${collection} maps to ${expected}`, () => {
+    const originalWindow = globalThis.window;
+    globalThis.window = {
+      collectionStore: {
+        userCollections: [{ displayName: collection, apps: new Set(['3000000000']) }],
+      },
+    };
+    try {
+      assert.equal(getStore('3000000000'), expected);
+    } finally {
+      globalThis.window = originalWindow;
+    }
+  });
+}

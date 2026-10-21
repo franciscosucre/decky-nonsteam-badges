@@ -20,7 +20,15 @@ class MappingRegressionTests(unittest.TestCase):
 
         def fake_open(path, mode="r", *args, **kwargs):
             if str(path).endswith("store_mappings.json"):
-                return io.StringIO(json.dumps({"gog": ["gog"], "epic": ["epic"]}))
+                return io.StringIO(
+                    json.dumps(
+                        {
+                            "gog": ["gog"],
+                            "epic": ["epic"],
+                            "xbox": ["xbox", "microsoft"],
+                        }
+                    )
+                )
             return io.BytesIO(b"") if "b" in mode else io.StringIO("")
 
         with (
@@ -57,3 +65,43 @@ class MappingRegressionTests(unittest.TestCase):
                 entry = self.get_mapping({"Exe": exe})
                 self.assertEqual(entry["store"], "emulators")
                 self.assertEqual(entry.get("emulator"), "ppsspp")
+
+    def test_xbox_console_labels_are_not_storefront_matches(self):
+        for collection in ("Xbox 360", "Xbox360"):
+            with self.subTest(collection=collection):
+                self.assertIsNone(self.get_mapping({}, [collection])["store"])
+        self.assertEqual(self.get_mapping({}, ["Xbox"])["store"], "xbox")
+
+    def test_packaging_variants_use_the_canonical_emulator_identity(self):
+        main = import_main()
+        for exe, launcher in (
+            ("/apps/PPSSPPQt", "ppsspp"),
+            ("/apps/ppssppqt.AppImage", "ppsspp"),
+            ("/apps/DuckStation-Qt", "duckstation"),
+            ("/apps/PCSX2-Qt-v2.6.3.AppImage", "pcsx2"),
+            ("/apps/xenia_canary.exe", "xenia"),
+            ("/apps/xenia-canary.exe", "xenia"),
+        ):
+            with self.subTest(exe=exe):
+                self.assertEqual(main._get_emulator_launcher(exe, ""), launcher)
+        for variant in (
+            "ppssppqt",
+            "duckstation-qt",
+            "pcsx2-qt",
+            "xenia_canary",
+            "xenia-canary",
+        ):
+            with self.subTest(variant=variant):
+                self.assertNotIn(variant, main.EMULATOR_ICON_NAMES)
+
+    def test_variant_collections_select_the_canonical_emulator(self):
+        for collection, expected in (
+            ("PPSSPPQt", "ppsspp"),
+            ("DuckStation-Qt", "duckstation"),
+            ("PCSX2-Qt", "pcsx2"),
+            ("Xenia Canary", "xenia"),
+        ):
+            with self.subTest(collection=collection):
+                entry = self.get_mapping({}, [collection])
+                self.assertEqual(entry["store"], "emulators")
+                self.assertEqual(entry.get("emulator"), expected)

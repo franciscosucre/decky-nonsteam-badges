@@ -85,15 +85,15 @@ Known emulator launchers are detected before generic storefront paths. These col
 | -------------- | ---------------------------------------- |
 | RetroArch      | `retroarch`                              |
 | Dolphin        | `dolphin`, `dolphin-emu`                 |
-| PCSX2          | `pcsx2`, `pcsx2-qt`                      |
+| PCSX2          | `pcsx2` (also `pcsx2-qt`)                |
 | RPCS3          | `rpcs3`                                  |
-| DuckStation    | `duckstation`, `duckstation-qt`          |
+| DuckStation    | `duckstation`                            |
 | Cemu           | `cemu`                                   |
 | Eden           | `eden`                                   |
 | Citron         | `citron`                                 |
-| Xenia          | `xenia`, `xenia_canary`, `xenia-canary`  |
+| Xenia          | `xenia` (also `xenia-canary`, `xenia_canary`) |
 | xemu           | `xemu`                                   |
-| PPSSPP         | `ppsspp`                                 |
+| PPSSPP         | `ppsspp` (also `ppssppqt`)               |
 
 Other emulators use the generic Emulators badge. Console-only labels don’t identify a specific emulator.
 

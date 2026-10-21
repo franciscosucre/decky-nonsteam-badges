@@ -18,14 +18,27 @@ except ImportError:
 # Decky plugin imports
 import decky
 
-# Launcher identifiers, not generic platform words (e.g. Xbox or Dolphin).
+# Canonical launcher identifiers, not generic platform words (e.g. Xbox or Dolphin).
+# Packaging variants such as "pcsx2-qt", "xenia_canary" or "ppssppqt" are matched
+# by pattern and normalized to these names, so they need no separate entry.
 EMULATOR_LAUNCHERS = (
-    "xenia", "xenia_canary", "xenia-canary", "xemu", "retroarch",
-    "dolphin-emu", "pcsx2", "pcsx2-qt", "rpcs3", "duckstation",
-    "duckstation-qt", "eden", "citron", "ppsspp", "ppssppqt", "mgba", "melonds",
+    "xenia", "xemu", "retroarch",
+    "dolphin-emu", "pcsx2", "rpcs3", "duckstation",
+    "eden", "citron", "ppsspp", "mgba", "melonds",
     "cemu", "citra", "azahar", "ryujinx", "yuzu", "flycast",
     "shadps4", "scummvm", "dosbox", "dosbox-x", "mame",
 )
+
+# Optional packaging markers that follow a canonical launcher name.
+LAUNCHER_VARIANT = r"(?:[-_.]?(?:qt|canary))?"
+
+# Optional version suffix, e.g. "pcsx2-v2.6.3".
+LAUNCHER_VERSION = r"(?:-v?\d+(?:[.-]\d+)*(?:-[a-z0-9]+)?)?"
+
+
+def _launcher_pattern(launcher: str) -> str:
+    """Match a canonical launcher name with its optional variant and version."""
+    return re.escape(launcher) + LAUNCHER_VARIANT + LAUNCHER_VERSION
 
 
 def _get_emulator_launcher(exe: str, launch_options: str) -> str | None:
@@ -43,12 +56,8 @@ def _get_emulator_launcher(exe: str, launch_options: str) -> str | None:
         if basename.startswith(("org.", "net.", "com.", "io.")):
             candidates.append(basename.rsplit(".", 1)[-1])
         for candidate in candidates:
-            if candidate in EMULATOR_LAUNCHERS:
-                return candidate
             for launcher in EMULATOR_LAUNCHERS:
-                if re.fullmatch(
-                    re.escape(launcher) + r"-v?\d+(?:[.-]\d+)*(?:-[a-z0-9]+)?", candidate
-                ):
+                if re.fullmatch(_launcher_pattern(launcher), candidate):
                     return launcher
     return None
 
@@ -58,22 +67,31 @@ def _is_emulator_launcher(exe: str, launch_options: str) -> bool:
 
 
 EMULATOR_ICON_NAMES = {
-    "retroarch": "retroarch", 
-    "dolphin-emu": "dolphin", 
-    "pcsx2": "pcsx2", 
-    "pcsx2-qt": "pcsx2", 
-    "rpcs3": "rpcs3", 
-    "duckstation": "duckstation", 
-    "duckstation-qt": "duckstation",
+    "retroarch": "retroarch",
+    "dolphin-emu": "dolphin",
+    "pcsx2": "pcsx2",
+    "rpcs3": "rpcs3",
+    "duckstation": "duckstation",
     "cemu": "cemu",
     "eden": "eden",
     "citron": "citron",
-    "xenia": "xenia", 
-    "xenia_canary": "xenia", 
-    "xenia-canary": "xenia", 
-    "xemu": "xemu", 
-    "ppsspp": "ppsspp", 
+    "xenia": "xenia",
+    "xemu": "xemu",
+    "ppsspp": "ppsspp",
 }
+
+# Store aliases that also name a console, so a trailing number means a console
+# collection such as "Xbox 360" instead of the storefront.
+CONSOLE_LABEL_ALIASES = frozenset({"xbox"})
+
+
+def _alias_pattern(alias: str) -> str:
+    """Match a store alias, ignoring console labels such as "Xbox 360"."""
+    pattern = r'\b' + re.escape(alias) + r'\b'
+    if alias.lower() in CONSOLE_LABEL_ALIASES:
+        pattern += r'(?!\s*\d)'
+    return pattern
+
 
 DEBUG_MODE = False
 
@@ -289,7 +307,9 @@ class Plugin:
                     # Specific emulator collections override automatically assigned store tags.
                     collection_emulator = None
                     for alias, icon in {**EMULATOR_ICON_NAMES, "dolphin": "dolphin"}.items():
-                        if re.search(r'\b' + re.escape(alias) + r'\b', tags_string):
+                        if re.search(
+                            r'\b' + re.escape(alias) + LAUNCHER_VARIANT + r'\b', tags_string
+                        ):
                             collection_emulator = icon
                             store = "emulators"
                             break
@@ -297,7 +317,7 @@ class Plugin:
                     # 1. Check user collections (tags) first
                     for s_key, aliases in (store_aliases.items() if not store else []):
                         for alias in aliases:
-                            if re.search(r'\b' + re.escape(alias) + r'\b(?!\s*\d)', tags_string):
+                            if re.search(_alias_pattern(alias), tags_string):
                                 store = s_key
                                 break
                         if store:
@@ -313,7 +333,7 @@ class Plugin:
                     if not store:
                         for s_key, aliases in store_aliases.items():
                             for alias in aliases:
-                                if re.search(r'\b' + re.escape(alias) + r'\b(?!\s*\d)', fallback_string):
+                                if re.search(_alias_pattern(alias), fallback_string):
                                     store = s_key
                                     break
                             if store:
