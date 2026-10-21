@@ -19,7 +19,6 @@ test("specific emulator collections select an identity without launch metadata",
     ["My PCSX2 games", "pcsx2"],
     ["PPSSPP", "ppsspp"],
     ["PCSX2-Qt", "pcsx2"],
-    ["DuckStation-Qt", "duckstation"],
   ])
     assert.equal(getCollectionEmulator(name), expected);
 });

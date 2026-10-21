@@ -59,12 +59,10 @@ class MappingRegressionTests(unittest.TestCase):
                 with self.subTest(alias=alias, field=field):
                     self.assertEqual(self.get_mapping({field: value})["store"], expected)
 
-    def test_ppssppqt_selects_dedicated_ppsspp_badge(self):
-        for exe in ("/apps/PPSSPPQt", "/apps/ppssppqt.AppImage"):
-            with self.subTest(exe=exe):
-                entry = self.get_mapping({"Exe": exe})
-                self.assertEqual(entry["store"], "emulators")
-                self.assertEqual(entry.get("emulator"), "ppsspp")
+    def test_ppsspp_selects_dedicated_ppsspp_badge(self):
+        entry = self.get_mapping({"Exe": "/apps/PPSSPP"})
+        self.assertEqual(entry["store"], "emulators")
+        self.assertEqual(entry.get("emulator"), "ppsspp")
 
     def test_xbox_console_labels_are_not_storefront_matches(self):
         for collection in ("Xbox 360", "Xbox360"):
@@ -75,9 +73,6 @@ class MappingRegressionTests(unittest.TestCase):
     def test_packaging_variants_use_the_canonical_emulator_identity(self):
         main = import_main()
         for exe, launcher in (
-            ("/apps/PPSSPPQt", "ppsspp"),
-            ("/apps/ppssppqt.AppImage", "ppsspp"),
-            ("/apps/DuckStation-Qt", "duckstation"),
             ("/apps/PCSX2-Qt-v2.6.3.AppImage", "pcsx2"),
             ("/apps/xenia_canary.exe", "xenia"),
             ("/apps/xenia-canary.exe", "xenia"),
@@ -85,8 +80,6 @@ class MappingRegressionTests(unittest.TestCase):
             with self.subTest(exe=exe):
                 self.assertEqual(main._get_emulator_launcher(exe, ""), launcher)
         for variant in (
-            "ppssppqt",
-            "duckstation-qt",
             "pcsx2-qt",
             "xeniaqt",
             "xenia_canary",
@@ -94,13 +87,12 @@ class MappingRegressionTests(unittest.TestCase):
         ):
             with self.subTest(variant=variant):
                 self.assertNotIn(variant, main.EMULATOR_ICON_NAMES)
-        for exe in ("/apps/xeniaqt", "/apps/XeniaQt.exe"):
+        for exe in ("/apps/PPSSPPQt", "/apps/DuckStation-Qt", "/apps/xeniaqt"):
             with self.subTest(exe=exe):
                 self.assertIsNone(main._get_emulator_launcher(exe, ""))
 
     def test_separated_variant_collections_select_the_canonical_emulator(self):
         for collection, expected in (
-            ("DuckStation-Qt", "duckstation"),
             ("PCSX2-Qt", "pcsx2"),
             ("Xenia Canary", "xenia"),
         ):

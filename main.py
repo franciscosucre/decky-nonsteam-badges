@@ -19,8 +19,8 @@ except ImportError:
 import decky
 
 # Canonical launcher identifiers, not generic platform words (e.g. Xbox or Dolphin).
-# Packaging variants such as "pcsx2-qt", "xenia_canary" or "ppssppqt" are matched
-# by pattern and normalized to these names, so they need no separate entry.
+# Known packaging suffixes are normalized to these names, so they need no
+# separate entry.
 EMULATOR_LAUNCHERS = (
     "xenia", "xemu", "retroarch",
     "dolphin-emu", "pcsx2", "rpcs3", "duckstation",
@@ -33,8 +33,6 @@ EMULATOR_LAUNCHERS = (
 # canonical name and never become separate emulator identities.
 EMULATOR_LAUNCHER_VARIANTS = {
     "pcsx2": ("-qt",),
-    "duckstation": ("-qt",),
-    "ppsspp": ("qt",),
     "xenia": ("_canary", "-canary"),
 }
 
