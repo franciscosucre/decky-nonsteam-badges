@@ -1,40 +1,36 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Packages a directory staged by build-plugin-content.sh into a Decky Loader ZIP.
+# Usage: build-plugin-zip.sh [CONTENT_DIR] [OUTPUT_FILE]
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-OUTPUT_DIR="${1:-.}"
-mkdir -p "$OUTPUT_DIR"
-OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
+REPO_ROOT="$(cd -- "$SCRIPT_DIR/.." && pwd)"
+
+CONTENT_DIR="${1:-$REPO_ROOT/decky-nonsteam-badges}"
+OUTPUT_FILE="${2:-$REPO_ROOT/decky-nonsteam-badges.zip}"
 
 if ! command -v zip >/dev/null 2>&1; then
 	echo "Error: zip is required to create the Decky Loader archive." >&2
 	exit 1
 fi
 
-cd "$SCRIPT_DIR/.."
-echo "Building plugin..."
-pnpm run build
-
-if [[ ! -f dist/index.js ]]; then
-	echo "Error: build did not produce dist/index.js." >&2
+if [[ ! -d "$CONTENT_DIR" ]]; then
+	echo "Error: content directory '$CONTENT_DIR' not found." >&2
+	echo "Run scripts/build-plugin-content.sh first to stage the plugin content." >&2
 	exit 1
 fi
 
-STAGING_DIR="$(mktemp -d)"
-trap 'rm -rf "$STAGING_DIR"' EXIT
-PLUGIN_DIR="$STAGING_DIR/decky-nonsteam-badges"
-mkdir -p "$PLUGIN_DIR/dist"
+CONTENT_DIR="$(cd "$CONTENT_DIR" && pwd)"
+mkdir -p "$(dirname "$OUTPUT_FILE")"
+OUTPUT_FILE="$(cd "$(dirname "$OUTPUT_FILE")" && pwd)/$(basename "$OUTPUT_FILE")"
 
-cp README.md LICENSE plugin.json package.json main.py store_mappings.json "$PLUGIN_DIR/"
-cp -R py_modules "$PLUGIN_DIR/"
-find "$PLUGIN_DIR/py_modules" -type d -name __pycache__ -prune -exec rm -rf {} +
-find "$PLUGIN_DIR/py_modules" -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
-cp dist/index.js "$PLUGIN_DIR/dist/"
+PLUGIN_NAME="$(basename "$CONTENT_DIR")"
+PARENT_DIR="$(dirname "$CONTENT_DIR")"
 
-echo "Packaging Decky Loader plugin..."
+echo "Packaging Decky Loader plugin ZIP..." >&2
+rm -f "$OUTPUT_FILE"
 (
-	cd "$STAGING_DIR"
-	zip -qr "$STAGING_DIR/decky-nonsteam-badges.zip" decky-nonsteam-badges
+	cd "$PARENT_DIR"
+	zip -qr "$OUTPUT_FILE" "$PLUGIN_NAME"
 )
-mv "$STAGING_DIR/decky-nonsteam-badges.zip" "$OUTPUT_DIR/decky-nonsteam-badges.zip"
-echo "Created $OUTPUT_DIR/decky-nonsteam-badges.zip"
+echo "Created $OUTPUT_FILE"

@@ -33,14 +33,21 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Build and package plugin
-        run: bash scripts/build-plugin-zip.sh .
+      - name: Stage plugin content
+        run: bash scripts/build-plugin-content.sh .
+
+      - name: Build plugin bundles
+        run: |
+          bash scripts/build-plugin-zip.sh decky-nonsteam-badges decky-nonsteam-badges.zip
+          bash scripts/build-plugin-tar.sh decky-nonsteam-badges decky-nonsteam-badges.tar.gz
 
       - name: Upload package
         uses: actions/upload-artifact@v4
         with:
           name: decky-nonsteam-badges
-          path: decky-nonsteam-badges.zip
+          path: |
+            decky-nonsteam-badges.zip
+            decky-nonsteam-badges.tar.gz
 
   release:
     needs: build
@@ -51,12 +58,6 @@ jobs:
         with:
           name: decky-nonsteam-badges
           path: .
-
-      - name: Create TAR release
-        run: |
-          mkdir -p release
-          unzip -q decky-nonsteam-badges.zip -d release
-          tar -czvf decky-nonsteam-badges.tar.gz -C release decky-nonsteam-badges
 
       - name: Create a release
         uses: ncipollo/release-action@v1
