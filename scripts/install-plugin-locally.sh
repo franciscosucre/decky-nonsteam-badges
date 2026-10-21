@@ -2,7 +2,6 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 PLUGIN_NAME="decky-nonsteam-badges"
 PLUGIN_ROOT="${DECKY_PLUGIN_ROOT:-$HOME/homebrew/plugins}"
 INSTALL_DIR="$PLUGIN_ROOT/$PLUGIN_NAME"
@@ -26,15 +25,6 @@ if ! command -v "$SYSTEMCTL" >/dev/null 2>&1; then
 	exit 1
 fi
 
-cd "$REPO_ROOT"
-echo "Building plugin..."
-pnpm run build
-
-if [[ ! -f dist/index.js ]]; then
-	echo "Error: build did not produce dist/index.js." >&2
-	exit 1
-fi
-
 STAGING_DIR="$(mktemp -d)"
 LOADER_STOPPED=0
 cleanup() {
@@ -48,13 +38,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-PLUGIN_DIR="$STAGING_DIR/$PLUGIN_NAME"
-mkdir -p "$PLUGIN_DIR/dist"
-cp README.md LICENSE plugin.json package.json main.py store_mappings.json "$PLUGIN_DIR/"
-cp -R py_modules "$PLUGIN_DIR/"
-find "$PLUGIN_DIR/py_modules" -type d -name __pycache__ -prune -exec rm -rf {} +
-find "$PLUGIN_DIR/py_modules" -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
-cp dist/index.js "$PLUGIN_DIR/dist/"
+PLUGIN_DIR="$(bash "$SCRIPT_DIR/build-plugin-content.sh" "$STAGING_DIR")"
 
 echo "Stopping plugin_loader..."
 "$SUDO" "$SYSTEMCTL" stop plugin_loader
