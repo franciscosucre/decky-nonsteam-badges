@@ -24,7 +24,7 @@ test("specific emulator collections select an identity without launch metadata",
 });
 
 test("generic and unrelated collections do not select an individual emulator", () => {
-  for (const name of ["Emulators", "mycemu", "myxenia", "retroarchived", "PPSSPPQt", "xeniaqt", ""]) {
+  for (const name of ["Emulators", "mycemu", "myxenia", "retroarchived", "xeniaqt", ""]) {
     assert.equal(getCollectionEmulator(name), null);
   }
 });

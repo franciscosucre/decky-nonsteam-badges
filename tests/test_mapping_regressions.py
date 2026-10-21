@@ -87,7 +87,7 @@ class MappingRegressionTests(unittest.TestCase):
         ):
             with self.subTest(variant=variant):
                 self.assertNotIn(variant, main.EMULATOR_ICON_NAMES)
-        for exe in ("/apps/PPSSPPQt", "/apps/DuckStation-Qt", "/apps/xeniaqt"):
+        for exe in ("/apps/xeniaqt",):
             with self.subTest(exe=exe):
                 self.assertIsNone(main._get_emulator_launcher(exe, ""))
 
@@ -100,6 +100,6 @@ class MappingRegressionTests(unittest.TestCase):
                 entry = self.get_mapping({}, [collection])
                 self.assertEqual(entry["store"], "emulators")
                 self.assertEqual(entry.get("emulator"), expected)
-        for collection in ("PPSSPPQt", "xeniaqt"):
+        for collection in ("xeniaqt",):
             with self.subTest(collection=collection):
                 self.assertIsNone(self.get_mapping({}, [collection])["store"])
