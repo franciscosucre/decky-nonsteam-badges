@@ -51,9 +51,36 @@ class MappingRegressionTests(unittest.TestCase):
                 with self.subTest(alias=alias, field=field):
                     self.assertEqual(self.get_mapping({field: value})["store"], expected)
 
-    def test_ppssppqt_selects_dedicated_ppsspp_badge(self):
-        for exe in ("/apps/PPSSPPQt", "/apps/ppssppqt.AppImage"):
-            with self.subTest(exe=exe):
-                entry = self.get_mapping({"Exe": exe})
-                self.assertEqual(entry["store"], "emulators")
-                self.assertEqual(entry.get("emulator"), "ppsspp")
+    def test_emulator_executable_variants_remain_recognized(self):
+        main = import_main()
+        # Keep this explicit: deriving cases from the implementation would hide
+        # a regression when an alias is removed from its supported launchers.
+        for executable in (
+            "pcsx2", "pcsx2-qt", "PCSX2-Qt-v2.6.3.AppImage",
+            "xenia", "xenia_canary.exe", "xenia-canary.exe",
+            "duckstation", "duckstation-qt", "duckstation-qt.AppImage",
+            "duckstation-qt-v0.1.AppImage",
+            "PPSSPP", "PPSSPPQt", "ppssppqt.AppImage",
+            "ppssppqt-v1.18.1.AppImage",
+        ):
+            with self.subTest(executable=executable):
+                self.assertTrue(main._is_emulator_launcher(f"/apps/{executable}", ""))
+
+    def test_emulator_executable_variants_select_the_canonical_badge(self):
+        for expected, executables in (
+            ("pcsx2", ("pcsx2", "pcsx2-qt", "PCSX2-Qt-v2.6.3.AppImage")),
+            ("xenia", ("xenia", "xenia_canary.exe", "xenia-canary.exe")),
+            ("duckstation", (
+                "duckstation", "duckstation-qt", "duckstation-qt.AppImage",
+                "duckstation-qt-v0.1.AppImage",
+            )),
+            ("ppsspp", (
+                "PPSSPP", "PPSSPPQt", "ppssppqt.AppImage",
+                "ppssppqt-v1.18.1.AppImage",
+            )),
+        ):
+            for executable in executables:
+                with self.subTest(executable=executable, expected=expected):
+                    entry = self.get_mapping({"Exe": f"/apps/{executable}"})
+                    self.assertEqual(entry["store"], "emulators")
+                    self.assertEqual(entry.get("emulator"), expected)
