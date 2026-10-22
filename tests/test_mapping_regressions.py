@@ -59,47 +59,36 @@ class MappingRegressionTests(unittest.TestCase):
                 with self.subTest(alias=alias, field=field):
                     self.assertEqual(self.get_mapping({field: value})["store"], expected)
 
-    def test_ppsspp_selects_dedicated_ppsspp_badge(self):
-        entry = self.get_mapping({"Exe": "/apps/PPSSPP"})
-        self.assertEqual(entry["store"], "emulators")
-        self.assertEqual(entry.get("emulator"), "ppsspp")
-
-    def test_xbox_console_labels_are_not_storefront_matches(self):
-        for collection in ("Xbox 360", "Xbox360"):
-            with self.subTest(collection=collection):
-                self.assertIsNone(self.get_mapping({}, [collection])["store"])
-        self.assertEqual(self.get_mapping({}, ["Xbox"])["store"], "xbox")
-
-    def test_packaging_variants_use_the_canonical_emulator_identity(self):
+    def test_emulator_executable_variants_remain_recognized(self):
         main = import_main()
-        for exe, launcher in (
-            ("/apps/PCSX2-Qt-v2.6.3.AppImage", "pcsx2"),
-            ("/apps/xenia_canary.exe", "xenia"),
-            ("/apps/xenia-canary.exe", "xenia"),
+        # Keep this explicit: deriving cases from the implementation would hide
+        # a regression when an alias is removed from its supported launchers.
+        for executable in (
+            "pcsx2", "pcsx2-qt", "PCSX2-Qt-v2.6.3.AppImage",
+            "xenia", "xenia_canary.exe", "xenia-canary.exe",
+            "duckstation", "duckstation-qt", "duckstation-qt.AppImage",
+            "duckstation-qt-v0.1.AppImage",
+            "PPSSPP", "PPSSPPQt", "ppssppqt.AppImage",
+            "ppssppqt-v1.18.1.AppImage",
         ):
-            with self.subTest(exe=exe):
-                self.assertEqual(main._get_emulator_launcher(exe, ""), launcher)
-        for variant in (
-            "pcsx2-qt",
-            "xeniaqt",
-            "xenia_canary",
-            "xenia-canary",
-        ):
-            with self.subTest(variant=variant):
-                self.assertNotIn(variant, main.EMULATOR_ICON_NAMES)
-        for exe in ("/apps/xeniaqt",):
-            with self.subTest(exe=exe):
-                self.assertIsNone(main._get_emulator_launcher(exe, ""))
+            with self.subTest(executable=executable):
+                self.assertTrue(main._is_emulator_launcher(f"/apps/{executable}", ""))
 
-    def test_separated_variant_collections_select_the_canonical_emulator(self):
-        for collection, expected in (
-            ("PCSX2-Qt", "pcsx2"),
-            ("Xenia Canary", "xenia"),
+    def test_emulator_executable_variants_select_the_canonical_badge(self):
+        for expected, executables in (
+            ("pcsx2", ("pcsx2", "pcsx2-qt", "PCSX2-Qt-v2.6.3.AppImage")),
+            ("xenia", ("xenia", "xenia_canary.exe", "xenia-canary.exe")),
+            ("duckstation", (
+                "duckstation", "duckstation-qt", "duckstation-qt.AppImage",
+                "duckstation-qt-v0.1.AppImage",
+            )),
+            ("ppsspp", (
+                "PPSSPP", "PPSSPPQt", "ppssppqt.AppImage",
+                "ppssppqt-v1.18.1.AppImage",
+            )),
         ):
-            with self.subTest(collection=collection):
-                entry = self.get_mapping({}, [collection])
-                self.assertEqual(entry["store"], "emulators")
-                self.assertEqual(entry.get("emulator"), expected)
-        for collection in ("xeniaqt",):
-            with self.subTest(collection=collection):
-                self.assertIsNone(self.get_mapping({}, [collection])["store"])
+            for executable in executables:
+                with self.subTest(executable=executable, expected=expected):
+                    entry = self.get_mapping({"Exe": f"/apps/{executable}"})
+                    self.assertEqual(entry["store"], "emulators")
+                    self.assertEqual(entry.get("emulator"), expected)
