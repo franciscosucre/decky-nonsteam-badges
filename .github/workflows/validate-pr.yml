@@ -3,12 +3,17 @@ name: Validate pull request
 on:
   pull_request:
   workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Pull request number to validate (leave empty for the selected branch)"
+        required: false
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: validate-pr-${{ github.event.pull_request.number || github.ref }}
+  group: validate-pr-${{ github.event.pull_request.number || inputs.pr_number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -18,6 +23,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.pr_number && format('refs/pull/{0}/merge', inputs.pr_number) || github.ref }}
 
       - uses: actions/setup-node@v5
         with:
