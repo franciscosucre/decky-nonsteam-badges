@@ -5,3 +5,8 @@ node_modules/
 .env
 __pycache__
 .test-dist/
+
+# Local plugin bundles
+/decky-nonsteam-badges/
+/decky-nonsteam-badges.zip
+/decky-nonsteam-badges.tar.gz

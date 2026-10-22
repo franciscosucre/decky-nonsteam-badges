@@ -32,23 +32,22 @@ jobs:
           pnpm --version
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
 
-      - name: Package
+      - name: Stage plugin content
+        run: bash scripts/build-plugin-content.sh
+
+      - name: Build plugin bundles
         run: |
-          PKG=decky-nonsteam-badges
-          mkdir -p "$PKG/dist"
-          cp README.md LICENSE plugin.json package.json main.py store_mappings.json "$PKG/"
-          cp -r py_modules "$PKG/"
-          cp dist/index.js "$PKG/dist/"
-          echo "Package contents:"
-          ls -R "$PKG"
+          bash scripts/build-plugin-zip.sh
+          bash scripts/build-plugin-tar.sh
 
       - name: Upload package
         uses: actions/upload-artifact@v4
         with:
           name: decky-nonsteam-badges
-          path: decky-nonsteam-badges
+          path: |
+            decky-nonsteam-badges.zip
+            decky-nonsteam-badges.tar.gz
 
   release:
     needs: build
@@ -58,12 +57,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: decky-nonsteam-badges
-          path: decky-nonsteam-badges
-
-      - name: Zip/Tar release
-        run: |
-          zip -r decky-nonsteam-badges.zip decky-nonsteam-badges
-          tar -czvf decky-nonsteam-badges.tar.gz decky-nonsteam-badges
+          path: .
 
       - name: Create a release
         uses: ncipollo/release-action@v1

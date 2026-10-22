@@ -51,6 +51,11 @@ class EmulatorLauncherTests(unittest.TestCase):
         for exe, options in (
             ('"C:\\Emulators\\Xenia\\xenia_canary.exe"', ''),
             ('/apps/PCSX2-Qt-v2.6.3.AppImage', ''),
+            ('/apps/DuckStation-Qt', ''),
+            ('/apps/DuckStation-Qt-v0.1.7.AppImage', ''),
+            ('/apps/PPSSPP', ''),
+            ('/apps/PPSSPPQt', ''),
+            ('/apps/PPSSPPQt-v1.17.1.AppImage', ''),
             ('/usr/bin/flatpak', 'run org.libretro.RetroArch'),
             ('/usr/bin/flatpak', 'run org.DolphinEmu.dolphin-emu'),
             ('/usr/bin/proton', '"/apps/xenia_canary.exe" "/games/xbox/game.iso"'),
@@ -270,6 +275,28 @@ class StoreMappingTests(unittest.TestCase):
             "20": {"appid": 232323232, "Exe": "/apps/rpcs3"},
             "21": {"appid": 242424242, "Exe": "/apps/duckstation"},
             "22": {"appid": 252525252, "Exe": "/apps/unifideck-launcher", "LaunchOptions": "microsoft:1234"},
+            "23": {"appid": 262626262, "AppName": "Emulation tagged game", "Exe": "/games/plain/game.exe"},
+            "24": {"appid": 272727272, "Exe": "/games/plain/ps2-game.exe"},
+            "25": {"appid": 282828282, "Exe": "/games/plain/xbox360-game.exe"},
+            "26": {"appid": 292929292, "Exe": "/apps/ppsspp"},
+            "27": {"appid": 303030303, "Exe": "/games/plain/game.exe"},
+            "28": {"appid": 313131313, "Exe": "/games/plain/game.exe"},
+            "29": {"appid": 323232323, "Exe": "/games/plain/game.exe"},
+            "30": {"appid": 333333334, "Exe": "/games/plain/game.exe"},
+            "31": {"appid": 343434343, "Exe": "/games/plain/game.exe"},
+            "32": {"appid": 353535353, "Exe": "/games/plain/game.exe"},
+            "33": {"appid": 363636363, "Exe": "/games/plain/game.exe"},
+            "34": {"appid": 373737373, "Exe": "/games/plain/game.exe"},
+            "35": {"appid": 383838383, "Exe": "/games/plain/game.exe"},
+            "36": {"appid": 393939393, "Exe": "/games/plain/game.exe"},
+            "37": {"appid": 404040404, "Exe": "/games/plain/game.exe"},
+            "38": {"appid": 414141414, "Exe": "/games/plain/game.exe"},
+            "39": {"appid": 424242424, "Exe": "/games/plain/game.exe"},
+            "40": {"appid": 434343434, "Exe": "/apps/eden"},
+            "41": {"appid": 444444445, "Exe": "/apps/cemu"},
+            "42": {"appid": 444444446, "Exe": "/games/plain/game.exe"},
+            "43": {"appid": 454545454, "Exe": "/apps/citron"},
+            "44": {"appid": 464646464, "Exe": "/games/plain/game.exe"},
         })
         apps = {
             "121212121": {"tags": {"0": "Sideloaded"}},
@@ -278,6 +305,24 @@ class StoreMappingTests(unittest.TestCase):
             "252525252": {"tags": {"0": "Xbox", "1": "Xenia"}},
             "111111111": {"tags": {"0": "Emulators"}},
             "666666666": {"tags": {"0": "GOG"}},
+            "262626262": {"tags": {"0": "Emulation"}},
+            "272727272": {"tags": {"0": "PS2"}},
+            "282828282": {"tags": {"0": "Xbox 360"}},
+            "303030303": {"tags": {"0": "PlayStation 2"}},
+            "313131313": {"tags": {"0": "Xbox360"}},
+            "323232323": {"tags": {"0": "PSP"}},
+            "333333334": {"tags": {"0": "PlayStation Portable"}},
+            "343434343": {"tags": {"0": "GC"}},
+            "353535353": {"tags": {"0": "GameCube"}},
+            "363636363": {"tags": {"0": "PS3"}},
+            "373737373": {"tags": {"0": "PlayStation 3"}},
+            "383838383": {"tags": {"0": "Eden"}},
+            "393939393": {"tags": {"0": "Nintendo Switch"}},
+            "404040404": {"tags": {"0": "Switch"}},
+            "414141414": {"tags": {"0": "PS1"}},
+            "424242424": {"tags": {"0": "PlayStation 1"}},
+            "444444446": {"tags": {"0": "Cemu"}},
+            "464646464": {"tags": {"0": "Citron"}},
         }
         fake_vdf = types.SimpleNamespace(
             load=lambda _file: {"UserLocalConfigStore": {"Software": {"Valve": {"Steam": {"apps": apps}}}}},
@@ -319,7 +364,27 @@ class StoreMappingTests(unittest.TestCase):
                 self.assertEqual(mapping["222222223"]["emulator"], "dolphin")
                 self.assertEqual(mapping["232323232"]["emulator"], "rpcs3")
                 self.assertEqual(mapping["242424242"]["store"], "emulators")
-                self.assertNotIn("emulator", mapping["242424242"])
+                self.assertEqual(mapping["242424242"]["emulator"], "duckstation")
+                self.assertEqual(mapping["262626262"]["store"], "emulators")
+                self.assertEqual(mapping["292929292"]["emulator"], "ppsspp")
+                for appid in (
+                    272727272, 282828282, 303030303, 313131313, 323232323,
+                    333333334, 343434343, 353535353, 363636363, 373737373,
+                    393939393, 404040404, 414141414, 424242424,
+                ):
+                    self.assertIsNone(mapping[str(appid)]["store"])
+                    self.assertNotIn("emulator", mapping[str(appid)])
+                self.assertEqual(mapping["434343434"]["store"], "emulators")
+                self.assertEqual(mapping["434343434"]["emulator"], "eden")
+                self.assertEqual(mapping["383838383"]["store"], "emulators")
+                self.assertEqual(mapping["383838383"]["emulator"], "eden")
+                for appid in (444444445, 444444446):
+                    self.assertEqual(mapping[str(appid)]["store"], "emulators")
+                    self.assertEqual(mapping[str(appid)]["emulator"], "cemu")
+                self.assertEqual(mapping["454545454"]["store"], "emulators")
+                self.assertEqual(mapping["454545454"]["emulator"], "citron")
+                self.assertEqual(mapping["464646464"]["store"], "emulators")
+                self.assertEqual(mapping["464646464"]["emulator"], "citron")
                 self.assertNotIn("emulator", mapping["181818181"])
                 self.assertEqual(mapping["252525252"]["store"], "emulators")
                 self.assertEqual(mapping["252525252"]["emulator"], "xenia")

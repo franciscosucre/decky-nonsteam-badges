@@ -70,13 +70,18 @@ function log(context, message, level = "log") {
 const EMULATOR_COLLECTION_PATTERNS = [
     ["retroarch", /\bretroarch\b/i],
     ["dolphin", /\bdolphin(?:-emu)?\b/i],
-    ["pcsx2", /\bpcsx2(?:-qt)?\b/i],
+    ["pcsx2", /\bpcsx2\b/i],
     ["rpcs3", /\brpcs3\b/i],
+    ["duckstation", /\bduckstation\b/i],
+    ["cemu", /\bcemu\b/i],
+    ["eden", /\beden\b/i],
+    ["citron", /\bcitron\b/i],
     ["xenia", /\bxenia(?:[_-]canary)?\b/i],
     ["xemu", /\bxemu\b/i],
+    ["ppsspp", /\bppsspp\b/i],
 ];
 function getCollectionEmulator(name) {
-    return EMULATOR_COLLECTION_PATTERNS.find(([, pattern]) => pattern.test(name))?.[0] ?? null;
+    return (EMULATOR_COLLECTION_PATTERNS.find(([, pattern]) => pattern.test(name))?.[0] ?? null);
 }
 
 var gog = [
@@ -118,6 +123,7 @@ var emulators = [
 	"emu",
 	"roms",
 	"emulators",
+	"emulation",
 	"retro"
 ];
 var gamevault = [
@@ -145,6 +151,9 @@ var storeMappings = {
 
 const context$3 = "cache";
 const CACHE_TTL_MS = 60 * 1000; // 1 minute
+// Store aliases that also name a console, so a trailing number means a console
+// collection such as "Xbox 360" instead of the storefront.
+const CONSOLE_LABEL_ALIASES = new Set(["xbox"]);
 let gameStoreMappingsCache = {};
 let mappingsLoaded = false;
 let isFetchingMappings = false;
@@ -173,7 +182,9 @@ function getAppIdCandidates(appid) {
 }
 function collectionContainsApp(apps, appid) {
     const candidates = getAppIdCandidates(appid);
-    if (apps && typeof apps.has === "function") {
+    if (apps &&
+        typeof apps.has ===
+            "function") {
         return candidates.some((candidate) => apps.has(candidate));
     }
     if (Array.isArray(apps)) {
@@ -259,7 +270,11 @@ function getFrontendMapping(appid) {
                 for (const store of supportedStores) {
                     const aliases = storeMappings[store] || [store];
                     for (const alias of aliases) {
-                        const regex = new RegExp(`\\b${escapeRegExp$1(alias)}\\b`, "i");
+                        let pattern = `\\b${escapeRegExp$1(alias)}\\b`;
+                        if (CONSOLE_LABEL_ALIASES.has(alias.toLowerCase())) {
+                            pattern += `(?!\\s*\\d)`;
+                        }
+                        const regex = new RegExp(pattern, "i");
                         if (regex.test(colName)) {
                             return { store };
                         }
@@ -298,7 +313,7 @@ function getEmulator(appid) {
     if (getStore(appid) !== "emulators")
         return null;
     const entry = gameStoreMappingsCache[appid];
-    return typeof entry === "object" ? entry.emulator ?? null : null;
+    return typeof entry === "object" ? (entry.emulator ?? null) : null;
 }
 function getCollectionVersion() {
     return collectionVersion;
@@ -447,12 +462,17 @@ function saveSettings(settings) {
 
 // Compact monochrome interpretations of the emulator marks. No raster data or filters.
 const EMULATOR_BADGE_ICONS = {
-    "retroarch": "<svg class=\"icon-badge\" width=\"64\" height=\"64\" viewBox=\"0 0 32 32\" fill=\"white\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8 5h3v3h10V5h3v3h3v4h3v3H2v-3h3V8h3Zm0 6v2h4v-2Zm12 0v2h4v-2ZM5 17h22v3h-6l4 5h-4l-5-5-5 5H7l4-5H5Z\"/></svg>",
-    "dolphin": "<svg class=\"icon-badge\" width=\"64\" height=\"64\" viewBox=\"0 0 32 32\" fill=\"white\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3 18C4 9 14 6 21 9c3-2 6-2 8 0-3-1-5 0-6 2C14 7 7 10 3 18Zm7-3c7-3 13 1 16 9-4-6-9-9-16-9Zm13-3c4 3 6 7 7 13-2-5-4-9-7-11Z\"/></svg>",
-    "pcsx2": "<svg class=\"icon-badge\" width=\"64\" height=\"64\" viewBox=\"0 0 32 32\" fill=\"white\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" stroke=\"white\" stroke-width=\"2.6\" stroke-linecap=\"square\" stroke-linejoin=\"round\"><path d=\"M3 23V9h6v7H3M13 23h6v-7h-6V9h6M23 9h6v7h-6v7h6\"/></g></svg>",
-    "rpcs3": "<svg class=\"icon-badge\" width=\"64\" height=\"64\" viewBox=\"0 0 32 32\" fill=\"white\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 8h16a4 4 0 0 1 0 8H6m16 0a4 4 0 0 1 0 8H6\" fill=\"none\" stroke=\"white\" stroke-width=\"3\" stroke-linecap=\"square\" stroke-linejoin=\"round\"/></svg>",
-    "xenia": "<svg class=\"icon-badge\" width=\"64\" height=\"64\" viewBox=\"0 0 32 32\" fill=\"white\" xmlns=\"http://www.w3.org/2000/svg\"><g fill=\"none\" stroke=\"white\" stroke-width=\"1.2\" stroke-linejoin=\"round\"><path d=\"m16 3 13 7.5V15l-13 7.5L3 15v-4.5Zm-13 7.5L16 18l13-7.5M16 18v4.5M5 17v1.5l2 1.2M9 19.3v1.5l2 1.2M13 21.6v1.5l2 1.2M19 20.8v1.5l-2 1.2M23 18.5V20l-2 1.2M27 16.2v1.5l-2 1.2\"/></g><path d=\"M9.5 7.5c4 1 7 3.5 12 7M22 7c-4 1.5-7 4-12 7.5\" fill=\"none\" stroke=\"white\" stroke-width=\"1.8\" stroke-linecap=\"round\"/></svg>",
-    "xemu": "<svg class=\"icon-badge\" width=\"64\" height=\"64\" viewBox=\"0 0 32 32\" fill=\"white\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"16\" cy=\"16\" r=\"14\" fill=\"none\" stroke=\"white\" stroke-width=\"1.5\"/><g fill=\"none\" stroke=\"white\" stroke-width=\"1.4\" stroke-linejoin=\"round\"><path d=\"m5 13 4 6m0-6-4 6m6-3h4v-3h-4v6h4m2 0v-6h3v6m0-6h3v6m2-6v6h3v-6\"/></g></svg>"
+    retroarch: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M8 5h3v3h10V5h3v3h3v4h3v3H2v-3h3V8h3Zm0 6v2h4v-2Zm12 0v2h4v-2ZM5 17h22v3h-6l4 5h-4l-5-5-5 5H7l4-5H5Z"/></svg>',
+    dolphin: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M3 18C4 9 14 6 21 9c3-2 6-2 8 0-3-1-5 0-6 2C14 7 7 10 3 18Zm7-3c7-3 13 1 16 9-4-6-9-9-16-9Zm13-3c4 3 6 7 7 13-2-5-4-9-7-11Z"/></svg>',
+    pcsx2: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="white" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="round"><path d="M3 23V9h6v7H3M13 23h6v-7h-6V9h6M23 9h6v7h-6v7h6"/></g></svg>',
+    rpcs3: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M6 8h16a4 4 0 0 1 0 8H6m16 0a4 4 0 0 1 0 8H6" fill="none" stroke="white" stroke-width="3" stroke-linecap="square" stroke-linejoin="round"/></svg>',
+    duckstation: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="white" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="round"><path d="M3 23V9h6v7H3"/><path d="M13 23h6v-7h-6V9h6"/><path d="M23 11l3-2v14M23 23h6"/></g></svg>',
+    cemu: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="white" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="round"><path d="M1 9l2.5 14L7 15l3.5 8L13 9"/><path d="M16 9v14"/><path d="M20 9v14"/><path d="M24 9v11.5a3 3 0 0 0 6 0V9"/></g></svg>',
+    eden: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="white" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="round"><rect x="4" y="6" width="24" height="20" rx="3"/><path d="M16 6v20"/><circle cx="10" cy="11" r="1" fill="white"/><circle cx="10" cy="18" r="1" fill="white"/><circle cx="22" cy="13" r="1" fill="white"/><circle cx="22" cy="20" r="1" fill="white"/></g></svg>',
+    citron: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="white" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="round"><rect x="4" y="6" width="24" height="20" rx="3"/><path d="M16 6v20"/><circle cx="10" cy="11" r="1" fill="white"/><circle cx="10" cy="18" r="1" fill="white"/><circle cx="22" cy="13" r="1" fill="white"/><circle cx="22" cy="20" r="1" fill="white"/></g></svg>',
+    xenia: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="white" stroke-width="1.2" stroke-linejoin="round"><path d="m16 3 13 7.5V15l-13 7.5L3 15v-4.5Zm-13 7.5L16 18l13-7.5M16 18v4.5M5 17v1.5l2 1.2M9 19.3v1.5l2 1.2M13 21.6v1.5l2 1.2M19 20.8v1.5l-2 1.2M23 18.5V20l-2 1.2M27 16.2v1.5l-2 1.2"/></g><path d="M9.5 7.5c4 1 7 3.5 12 7M22 7c-4 1.5-7 4-12 7.5" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>',
+    xemu: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="14" fill="none" stroke="white" stroke-width="1.5"/><g fill="none" stroke="white" stroke-width="1.4" stroke-linejoin="round"><path d="m5 13 4 6m0-6-4 6m6-3h4v-3h-4v6h4m2 0v-6h3v6m0-6h3v6m2-6v6h3v-6"/></g></svg>',
+    ppsspp: '<svg class="icon-badge" width="64" height="64" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="white" stroke-width="2.6" stroke-linecap="square" stroke-linejoin="round"><path d="M3 23V9h6v7H3M13 23h6v-7h-6V9h6M23 23V9h6v7h-6" /></g></svg>',
 };
 
 const PULSATING_CLASSNAME = "nonsteam-badge-pulsing";
