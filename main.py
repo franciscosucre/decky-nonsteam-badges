@@ -29,11 +29,15 @@ EMULATOR_LAUNCHERS = (
     "shadps4", "scummvm", "dosbox", "dosbox-x", "mame",
 )
 
-# Known launcher binaries that are packaged with a suffix. They normalize to the
-# canonical name and never become separate emulator identities.
-EMULATOR_LAUNCHER_VARIANTS = {
+# Optional executable-name suffixes, mapped to the canonical emulator.
+# Examples: pcsx2-qt -> pcsx2, xenia_canary -> xenia,
+#           duckstation-qt -> duckstation, ppssppqt -> ppsspp.
+# The canonical executable name is always accepted without a suffix.
+EMULATOR_LAUNCHER_SUFFIXES = {
     "pcsx2": ("-qt",),
     "xenia": ("_canary", "-canary"),
+    "duckstation": ("-qt",),
+    "ppsspp": ("qt",),
 }
 
 # Optional version suffix, e.g. "pcsx2-v2.6.3".
@@ -42,7 +46,7 @@ LAUNCHER_VERSION = r"(?:-v?\d+(?:[.-]\d+)*(?:-[a-z0-9]+)?)?"
 
 def _launcher_pattern(launcher: str) -> str:
     """Match a canonical launcher name and its known packaging suffixes."""
-    variants = EMULATOR_LAUNCHER_VARIANTS.get(launcher, ())
+    variants = EMULATOR_LAUNCHER_SUFFIXES.get(launcher, ())
     variant_pattern = (
         "(?:" + "|".join(re.escape(variant) for variant in variants) + ")?"
         if variants
