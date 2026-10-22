@@ -92,3 +92,39 @@ class MappingRegressionTests(unittest.TestCase):
                     entry = self.get_mapping({"Exe": f"/apps/{executable}"})
                     self.assertEqual(entry["store"], "emulators")
                     self.assertEqual(entry.get("emulator"), expected)
+
+    def test_xbox_console_labels_are_not_storefront_matches(self):
+        for collection in ("Xbox 360", "Xbox360"):
+            with self.subTest(collection=collection):
+                self.assertIsNone(self.get_mapping({}, [collection])["store"])
+        self.assertEqual(self.get_mapping({}, ["Xbox"])["store"], "xbox")
+
+    def test_launcher_variants_are_not_separate_emulator_identities(self):
+        main = import_main()
+        for variant in (
+            "pcsx2-qt",
+            "duckstation-qt",
+            "ppssppqt",
+            "xeniaqt",
+            "xenia_canary",
+            "xenia-canary",
+        ):
+            with self.subTest(variant=variant):
+                self.assertNotIn(variant, main.EMULATOR_ICON_NAMES)
+        for exe in ("/apps/xeniaqt",):
+            with self.subTest(exe=exe):
+                self.assertIsNone(main._get_emulator_launcher(exe, ""))
+
+    def test_separated_variant_collections_select_the_canonical_emulator(self):
+        for collection, expected in (
+            ("PCSX2-Qt", "pcsx2"),
+            ("DuckStation-Qt", "duckstation"),
+            ("Xenia Canary", "xenia"),
+        ):
+            with self.subTest(collection=collection):
+                entry = self.get_mapping({}, [collection])
+                self.assertEqual(entry["store"], "emulators")
+                self.assertEqual(entry.get("emulator"), expected)
+        for collection in ("xeniaqt",):
+            with self.subTest(collection=collection):
+                self.assertIsNone(self.get_mapping({}, [collection])["store"])

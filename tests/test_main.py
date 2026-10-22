@@ -51,7 +51,11 @@ class EmulatorLauncherTests(unittest.TestCase):
         for exe, options in (
             ('"C:\\Emulators\\Xenia\\xenia_canary.exe"', ''),
             ('/apps/PCSX2-Qt-v2.6.3.AppImage', ''),
+            ('/apps/DuckStation-Qt', ''),
+            ('/apps/DuckStation-Qt-v0.1.7.AppImage', ''),
             ('/apps/PPSSPP', ''),
+            ('/apps/PPSSPPQt', ''),
+            ('/apps/PPSSPPQt-v1.17.1.AppImage', ''),
             ('/usr/bin/flatpak', 'run org.libretro.RetroArch'),
             ('/usr/bin/flatpak', 'run org.DolphinEmu.dolphin-emu'),
             ('/usr/bin/proton', '"/apps/xenia_canary.exe" "/games/xbox/game.iso"'),

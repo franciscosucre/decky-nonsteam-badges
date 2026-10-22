@@ -87,13 +87,13 @@ Known emulator launchers are detected before generic storefront paths. These col
 | Dolphin        | `dolphin`, `dolphin-emu` | `dolphin-emu`                            |
 | PCSX2          | `pcsx2`                  | `pcsx2`, `pcsx2-qt`                      |
 | RPCS3          | `rpcs3`                  | `rpcs3`                                  |
-| DuckStation    | `duckstation`            | `duckstation`                            |
+| DuckStation    | `duckstation`            | `duckstation`, `duckstation-qt`          |
 | Cemu           | `cemu`                   | `cemu`                                   |
 | Eden           | `eden`                   | `eden`                                   |
 | Citron         | `citron`                 | `citron`                                 |
 | Xenia          | `xenia`                  | `xenia`, `xenia-canary`, `xenia_canary`  |
 | xemu           | `xemu`                   | `xemu`                                   |
-| PPSSPP         | `ppsspp`                 | `ppsspp`                                 |
+| PPSSPP         | `ppsspp`                 | `ppsspp`, `ppssppqt`                     |
 
 Launcher binaries with a packaging suffix normalize to the canonical badge; they are not separate emulator identities.
 
